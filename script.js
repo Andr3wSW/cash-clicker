@@ -43,6 +43,13 @@ upgradeBtn.addEventListener("click", () => {
             upgradeCost * 1.5
         );
 
+        coin.style.animation =
+        "coinSpin .6s";
+
+        setTimeout(()=>{
+            coin.style.animation = "";
+        },600);
+
         updateUI();
     }
 });
@@ -112,3 +119,37 @@ tabButtons.forEach(button=>{
     });
 
 });
+
+function updateCoinVisual(){
+
+    const level = clickPower;
+
+    const stage =
+    Math.min(
+        Math.floor((level-1)/5),
+        4
+    );
+
+    const tier =
+    ((level-1)%5)+1;
+
+    const coinData =
+    coinStages[stage];
+
+    coin.innerHTML =
+    coinData.symbol;
+
+    coin.style.background =
+    `linear-gradient(
+        135deg,
+        ${coinData.color1},
+        ${coinData.color2}
+    )`;
+
+    document
+    .getElementById("coinTier")
+    .textContent =
+    `${coinData.name} Tier ${tier}`;
+}
+
+updateCoinVisual();
