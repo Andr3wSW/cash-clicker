@@ -88,6 +88,10 @@ body{
     transform:scale(1.05);
 }
 
+#coin:active{
+    transform:scale(0.8)
+}
+
 #upgradeBtn{
     padding:15px 30px;
     font-size:18px;
