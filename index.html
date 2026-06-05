@@ -6,22 +6,70 @@
 </head>
 <body>
 
-    <h1>CASH CLICKER</h1>
+<div id="app">
 
-    <div id="money">$0</div>
+    <div id="sidebar">
+        <h2>CASH OS</h2>
 
-    <button id="cashButton">💵 CLICK FOR CASH 💵</button>
-
-    <div id="shop">
-        <h2>Shop</h2>
-
-        <button id="upgradeBtn">
-            Better Finger ($10)
-        </button>
-
-        <p>Click Power: <span id="clickPower">1</span></p>
+        <button class="tabBtn" data-tab="clicker">💵 Clicker</button>
+        <button class="tabBtn" data-tab="casino">🎰 Casino</button>
+        <button class="tabBtn" data-tab="stocks">📈 Stocks</button>
+        <button class="tabBtn" data-tab="duels">⚔️ Duels</button>
+        <button class="tabBtn" data-tab="leaderboards">🏆 Leaderboards</button>
     </div>
 
-    <script src="script.js"></script>
+    <div id="content">
+
+        <div class="tab active" id="clicker">
+
+            <h1>CASH CLICKER</h1>
+
+            <div id="money">$0</div>
+
+            <button id="cashButton">
+                💵 CLICK FOR CASH 💵
+            </button>
+
+            <div id="shop">
+                <h2>Shop</h2>
+
+                <button id="upgradeBtn">
+                    Better Finger ($10)
+                </button>
+
+                <p>
+                    Click Power:
+                    <span id="clickPower">1</span>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="tab" id="casino">
+            <h1>🎰 Casino</h1>
+            <p>Coming Soon</p>
+        </div>
+
+        <div class="tab" id="stocks">
+            <h1>📈 Stocks</h1>
+            <p>Coming Soon</p>
+        </div>
+
+        <div class="tab" id="duels">
+            <h1>⚔️ Duels</h1>
+            <p>Coming Soon</p>
+        </div>
+
+        <div class="tab" id="leaderboards">
+            <h1>🏆 Leaderboards</h1>
+            <p>Coming Soon</p>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
