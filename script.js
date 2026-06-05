@@ -268,3 +268,174 @@ function spawnDollar(){
 }
 
 setInterval(spawnDollar,400);
+
+function coinFlip(choice){
+
+    const bet =
+    Number(
+        document
+        .getElementById("coinBet")
+        .value
+    );
+
+    if(bet <= 0 || bet > money)
+        return;
+
+    money -= bet;
+
+    const result =
+    Math.random() < .5
+    ? "heads"
+    : "tails";
+
+    if(choice === result){
+
+        money += bet * 2;
+
+        document
+        .getElementById(
+            "coinResult"
+        )
+        .textContent =
+        "You won!";
+    }
+    else{
+
+        document
+        .getElementById(
+            "coinResult"
+        )
+        .textContent =
+        "You lost!";
+    }
+
+    updateUI();
+}
+
+flipHeads.onclick =
+()=>coinFlip("heads");
+
+flipTails.onclick =
+()=>coinFlip("tails");
+
+rollDice.onclick = ()=>{
+
+    const bet =
+    Number(diceBet.value);
+
+    if(bet > money || bet <= 0)
+        return;
+
+    money -= bet;
+
+    const roll =
+    Math.floor(
+        Math.random()*6
+    )+1;
+
+    if(roll >= 5){
+
+        money += bet * 3;
+
+        diceResult.textContent =
+        "Rolled " + roll +
+        " - WIN";
+    }
+    else{
+
+        diceResult.textContent =
+        "Rolled " + roll +
+        " - LOSS";
+    }
+
+    updateUI();
+};
+
+spinSlots.onclick = ()=>{
+
+    const bet =
+    Number(slotBet.value);
+
+    if(bet > money || bet <= 0)
+        return;
+
+    money -= bet;
+
+    const symbols =
+    ["🍒","🍋","⭐","💎"];
+
+    const a =
+    symbols[
+        Math.floor(
+            Math.random()*4
+        )
+    ];
+
+    const b =
+    symbols[
+        Math.floor(
+            Math.random()*4
+        )
+    ];
+
+    const c =
+    symbols[
+        Math.floor(
+            Math.random()*4
+        )
+    ];
+
+    let payout = 0;
+
+    if(a===b && b===c)
+        payout = 10;
+
+    else if(a===b || b===c)
+        payout = 2;
+
+    money += bet * payout;
+
+    slotResult.textContent =
+    `${a} ${b} ${c}`;
+    
+    updateUI();
+};
+
+playBJ.onclick = ()=>{
+
+    const bet =
+    Number(bjBet.value);
+
+    if(bet > money || bet <= 0)
+        return;
+
+    money -= bet;
+
+    const player =
+    Math.floor(
+        Math.random()*11
+    ) + 11;
+
+    const dealer =
+    Math.floor(
+        Math.random()*11
+    ) + 11;
+
+    if(
+        player > dealer ||
+        dealer > 21
+    ){
+
+        money += bet * 2;
+
+        bjResult.textContent =
+        `You ${player} Dealer ${dealer} WIN`;
+    }
+    else{
+
+        bjResult.textContent =
+        `You ${player} Dealer ${dealer} LOSS`;
+    }
+
+    updateUI();
+};
