@@ -77,3 +77,27 @@ function loadGame(){
 setInterval(saveGame,5000);
 
 loadGame();
+
+const tabButtons =
+document.querySelectorAll(".tabBtn");
+
+const tabs =
+document.querySelectorAll(".tab");
+
+tabButtons.forEach(button=>{
+
+    button.addEventListener("click",()=>{
+
+        tabs.forEach(tab=>{
+            tab.classList.remove("active");
+        });
+
+        document
+        .getElementById(
+            button.dataset.tab
+        )
+        .classList.add("active");
+
+    });
+
+});
