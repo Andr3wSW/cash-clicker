@@ -19,3 +19,47 @@ body{
 #shop{
     margin-top:40px;
 }
+
+#app{
+    display:flex;
+    height:100vh;
+}
+
+#sidebar{
+    width:220px;
+    background:#181818;
+    padding:15px;
+    border-right:3px solid #00ff00;
+}
+
+#sidebar h2{
+    text-align:center;
+}
+
+.tabBtn{
+    width:100%;
+    margin:5px 0;
+    padding:12px;
+    background:#222;
+    color:#00ff00;
+    border:1px solid #00ff00;
+    cursor:pointer;
+}
+
+.tabBtn:hover{
+    background:#00ff00;
+    color:black;
+}
+
+#content{
+    flex:1;
+    padding:20px;
+}
+
+.tab{
+    display:none;
+}
+
+.tab.active{
+    display:block;
+}
