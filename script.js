@@ -5,6 +5,44 @@ let upgradeCost = 10;
 const moneyDisplay = document.getElementById("money");
 const clickPowerDisplay = document.getElementById("clickPower");
 const upgradeBtn = document.getElementById("upgradeBtn");
+const coinStages = [
+
+{
+    name:"Copper",
+    color1:"#c97b3b",
+    color2:"#a65b1d",
+    symbol:"¢"
+},
+
+{
+    name:"Silver",
+    color1:"#d9d9d9",
+    color2:"#9e9e9e",
+    symbol:"S"
+},
+
+{
+    name:"Gold",
+    color1:"#ffd54f",
+    color2:"#ffb300",
+    symbol:"$"
+},
+
+{
+    name:"Diamond",
+    color1:"#80deea",
+    color2:"#26c6da",
+    symbol:"♦"
+},
+
+{
+    name:"Crypto",
+    color1:"#8e24aa",
+    color2:"#4a148c",
+    symbol:"₿"
+}
+
+];
 
 function updateUI(){
     moneyDisplay.textContent = "$" + Math.floor(money);
