@@ -5,9 +5,6 @@ let upgradeCost = 10;
 const moneyDisplay =
 document.getElementById("money");
 
-const clickPowerDisplay =
-document.getElementById("clickPower");
-
 const upgradeBtn =
 document.getElementById("upgradeBtn");
 
@@ -89,9 +86,6 @@ function updateUI(){
     moneyDisplay.textContent =
     "$" + Math.floor(money);
 
-    clickPowerDisplay.textContent =
-    clickPower;
-
     upgradeBtn.textContent =
     `Upgrade Coin ($${upgradeCost})`;
 
@@ -101,6 +95,8 @@ function updateUI(){
 coin.addEventListener("click",()=>{
 
     money += clickPower;
+
+    createFloatingMoney(clickPower);
 
     updateUI();
 });
@@ -197,3 +193,42 @@ loadGame();
 updateUI();
 
 setInterval(saveGame,5000);
+
+function createFloatingMoney(amount){
+
+    const popup =
+    document.createElement("div");
+
+    popup.className =
+    "floatingMoney";
+
+    popup.textContent =
+    "+" + amount;
+
+    const rect =
+    coin.getBoundingClientRect();
+
+    const randomX =
+    rect.left +
+    Math.random() * rect.width;
+
+    const randomY =
+    rect.top +
+    Math.random() * rect.height;
+
+    popup.style.left =
+    randomX + "px";
+
+    popup.style.top =
+    randomY + "px";
+
+    document.body
+    .appendChild(popup);
+
+    setTimeout(()=>{
+
+        popup.remove();
+
+    },1000);
+
+}
