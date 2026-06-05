@@ -232,3 +232,39 @@ function createFloatingMoney(amount){
     },1000);
 
 }
+
+function spawnDollar(){
+
+    const dollar =
+    document.createElement("div");
+
+    dollar.className =
+    "dollar";
+
+    dollar.textContent =
+    "$";
+
+    dollar.style.left =
+    Math.random() * 100 + "vw";
+
+    dollar.style.fontSize =
+    (20 + Math.random()*40)
+    + "px";
+
+    dollar.style.animationDuration =
+    (5 + Math.random()*8)
+    + "s";
+
+    document
+    .getElementById("moneyRain")
+    .appendChild(dollar);
+
+    setTimeout(()=>{
+
+        dollar.remove();
+
+    },13000);
+
+}
+
+setInterval(spawnDollar,400);
