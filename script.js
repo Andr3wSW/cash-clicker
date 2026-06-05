@@ -14,10 +14,21 @@ function updateUI(){
 }
 
 document
-.getElementById("cashButton")
+.getElementById("coin")
 .addEventListener("click", () => {
     money += clickPower;
     updateUI();
+
+    const coin =
+document.getElementById("coin");
+
+coin.style.transform =
+"scale(0.9)";
+
+setTimeout(()=>{
+    coin.style.transform =
+    "scale(1)";
+},100);
 });
 
 upgradeBtn.addEventListener("click", () => {
