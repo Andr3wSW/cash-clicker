@@ -1,19 +1,7 @@
 body{
-    text-align:center;
     margin:0;
-    background:#f4f7f6;
-    color:#222;
     font-family:Arial,sans-serif;
-}
-
-#money{
-    font-size:64px;
-    color:#2e7d32;
-    font-weight:bold;
-}
-
-#shop{
-    margin-top:40px;
+    background:#f5f7f8;
 }
 
 #app{
@@ -24,32 +12,28 @@ body{
 #sidebar{
     width:220px;
     background:white;
-    border-right:2px solid #d9e8e1;
+    border-right:2px solid #dddddd;
     padding:15px;
-}
-
-#sidebar h2{
-    text-align:center;
 }
 
 .tabBtn{
     width:100%;
-    margin:5px 0;
     padding:12px;
-    background:white;
-    color:#2e7d32;
-    border:1px solid #c8e6c9;
+    margin-bottom:8px;
+    border:none;
     border-radius:10px;
+    background:#e8f5e9;
     cursor:pointer;
+    font-size:16px;
 }
 
 .tabBtn:hover{
-    background:#e8f5e9;
+    background:#c8e6c9;
 }
 
 #content{
     flex:1;
-    padding:20px;
+    padding:25px;
 }
 
 .tab{
@@ -60,65 +44,71 @@ body{
     display:block;
 }
 
+#money{
+    font-size:60px;
+    color:#2e7d32;
+    font-weight:bold;
+}
+
+#coinTier{
+    margin-top:20px;
+}
+
 #coinContainer{
     display:flex;
     justify-content:center;
-    margin:40px;
+    margin:30px;
 }
 
 #coin{
     width:180px;
     height:180px;
     border-radius:50%;
-    background:linear-gradient(
-        135deg,
-        #ffd54f,
-        #ffb300
-    );
-
     display:flex;
     align-items:center;
     justify-content:center;
-
-    font-size:80px;
+    font-size:70px;
     font-weight:bold;
-
     cursor:pointer;
-
     user-select:none;
 
-    box-shadow:
-        0 8px 20px rgba(0,0,0,.15);
+    background:linear-gradient(
+        135deg,
+        #c97b3b,
+        #a65b1d
+    );
 
-    transition:.1s;
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+
+    transition:transform .15s;
 }
 
 #coin:hover{
     transform:scale(1.05);
 }
 
-#coin:active{
-    transform:scale(.92);
-}
-
-#coinTier{
-    text-align:center;
-    font-size:32px;
-    margin-top:20px;
-    color:#444;
-}
-
-.upgradeBtn{
+#upgradeBtn{
     padding:15px 30px;
-    font-size:20px;
+    font-size:18px;
     border:none;
-    border-radius:12px;
+    border-radius:10px;
     background:#4caf50;
     color:white;
     cursor:pointer;
-    box-shadow:0 4px 10px rgba(0,0,0,.15);
 }
 
-.upgradeBtn:hover{
+#upgradeBtn:hover{
     background:#43a047;
+}
+
+@keyframes spin{
+
+    from{
+        transform:rotateY(0deg);
+    }
+
+    to{
+        transform:rotateY(360deg);
+    }
+
 }
