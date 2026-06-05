@@ -48,7 +48,8 @@ function updateUI(){
     moneyDisplay.textContent = "$" + Math.floor(money);
     clickPowerDisplay.textContent = clickPower;
     upgradeBtn.textContent =
-        `Better Finger ($${upgradeCost})`;
+        `Upgrade Coin ($${upgradeCost})`;
+    updateCoinVisual();
 }
 
 document
@@ -87,9 +88,6 @@ upgradeBtn.addEventListener("click", () => {
         setTimeout(()=>{
             coin.style.animation = "";
         },600);
-
-        updateUI();
-    }
 });
 
 setInterval(() => {
@@ -189,5 +187,3 @@ function updateCoinVisual(){
     .textContent =
     `${coinData.name} Tier ${tier}`;
 }
-
-updateCoinVisual();
