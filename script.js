@@ -2,95 +2,131 @@ let money = 0;
 let clickPower = 1;
 let upgradeCost = 10;
 
-const moneyDisplay = document.getElementById("money");
-const clickPowerDisplay = document.getElementById("clickPower");
-const upgradeBtn = document.getElementById("upgradeBtn");
+const moneyDisplay =
+document.getElementById("money");
+
+const clickPowerDisplay =
+document.getElementById("clickPower");
+
+const upgradeBtn =
+document.getElementById("upgradeBtn");
+
+const coin =
+document.getElementById("coin");
+
+const coinTier =
+document.getElementById("coinTier");
+
 const coinStages = [
 
 {
     name:"Copper",
+    symbol:"¢",
     color1:"#c97b3b",
-    color2:"#a65b1d",
-    symbol:"¢"
+    color2:"#a65b1d"
 },
 
 {
     name:"Silver",
-    color1:"#d9d9d9",
-    color2:"#9e9e9e",
-    symbol:"S"
+    symbol:"S",
+    color1:"#dddddd",
+    color2:"#999999"
 },
 
 {
     name:"Gold",
+    symbol:"$",
     color1:"#ffd54f",
-    color2:"#ffb300",
-    symbol:"$"
+    color2:"#ffb300"
 },
 
 {
     name:"Diamond",
+    symbol:"♦",
     color1:"#80deea",
-    color2:"#26c6da",
-    symbol:"♦"
+    color2:"#26c6da"
 },
 
 {
     name:"Crypto",
-    color1:"#8e24aa",
-    color2:"#4a148c",
-    symbol:"₿"
+    symbol:"₿",
+    color1:"#ab47bc",
+    color2:"#6a1b9a"
 }
 
 ];
 
+function updateCoinVisual(){
+
+    const stage =
+    Math.min(
+        Math.floor((clickPower - 1) / 5),
+        4
+    );
+
+    const tier =
+    ((clickPower - 1) % 5) + 1;
+
+    const data =
+    coinStages[stage];
+
+    coin.textContent =
+    data.symbol;
+
+    coin.style.background =
+    `linear-gradient(
+        135deg,
+        ${data.color1},
+        ${data.color2}
+    )`;
+
+    coinTier.textContent =
+    `${data.name} Tier ${tier}`;
+}
+
 function updateUI(){
-    moneyDisplay.textContent = "$" + Math.floor(money);
-    clickPowerDisplay.textContent = clickPower;
+
+    moneyDisplay.textContent =
+    "$" + Math.floor(money);
+
+    clickPowerDisplay.textContent =
+    clickPower;
+
     upgradeBtn.textContent =
-        `Upgrade Coin ($${upgradeCost})`;
+    `Upgrade Coin ($${upgradeCost})`;
+
     updateCoinVisual();
 }
 
-document
-.getElementById("coin")
-.addEventListener("click", () => {
+coin.addEventListener("click",()=>{
+
     money += clickPower;
+
     updateUI();
-
-    const coin =
-document.getElementById("coin");
-
-coin.style.transform =
-"scale(0.9)";
-
-setTimeout(()=>{
-    coin.style.transform =
-    "scale(1)";
-},100);
 });
 
-upgradeBtn.addEventListener("click", () => {
+upgradeBtn.addEventListener("click",()=>{
 
-    if(money >= upgradeCost){
+    if(money < upgradeCost) return;
 
-        money -= upgradeCost;
+    money -= upgradeCost;
 
-        clickPower++;
+    clickPower++;
 
-        upgradeCost = Math.floor(
-            upgradeCost * 1.5
-        );
+    upgradeCost =
+    Math.floor(upgradeCost * 1.5);
 
-        coin.style.animation =
-        "coinSpin .6s";
+    coin.style.animation =
+    "spin .6s";
 
-        setTimeout(()=>{
-            coin.style.animation = "";
-        },600);
+    setTimeout(()=>{
+        coin.style.animation = "";
+    },600);
+
+    updateUI();
 });
 
-setInterval(() => {
+setInterval(()=>{
 
     money += clickPower * 0.2;
 
@@ -98,14 +134,45 @@ setInterval(() => {
 
 },1000);
 
+document
+.querySelectorAll(".tabBtn")
+.forEach(button=>{
+
+    button.addEventListener(
+        "click",
+        ()=>{
+
+            document
+            .querySelectorAll(".tab")
+            .forEach(tab=>{
+
+                tab.classList
+                .remove("active");
+
+            });
+
+            document
+            .getElementById(
+                button.dataset.tab
+            )
+            .classList
+            .add("active");
+
+        }
+    );
+
+});
+
 function saveGame(){
 
     localStorage.setItem(
         "cashClickerSave",
         JSON.stringify({
+
             money,
             clickPower,
             upgradeCost
+
         })
     );
 }
@@ -119,71 +186,14 @@ function loadGame(){
         )
     );
 
-    if(save){
-        money = save.money;
-        clickPower = save.clickPower;
-        upgradeCost = save.upgradeCost;
-    }
+    if(!save) return;
 
-    updateUI();
+    money = save.money;
+    clickPower = save.clickPower;
+    upgradeCost = save.upgradeCost;
 }
-
-setInterval(saveGame,5000);
 
 loadGame();
+updateUI();
 
-const tabButtons =
-document.querySelectorAll(".tabBtn");
-
-const tabs =
-document.querySelectorAll(".tab");
-
-tabButtons.forEach(button=>{
-
-    button.addEventListener("click",()=>{
-
-        tabs.forEach(tab=>{
-            tab.classList.remove("active");
-        });
-
-        document
-        .getElementById(
-            button.dataset.tab
-        )
-        .classList.add("active");
-
-    });
-
-});
-
-function updateCoinVisual(){
-
-    const level = clickPower;
-
-    const stage =
-    Math.min(
-        Math.floor((level-1)/5),
-        4
-    );
-
-    const tier =
-    ((level-1)%5)+1;
-
-    const coinData =
-    coinStages[stage];
-
-    coin.innerHTML =
-    coinData.symbol;
-
-    coin.style.background =
-    `linear-gradient(
-        135deg,
-        ${coinData.color1},
-        ${coinData.color2}
-    )`;
-
-    document
-    .getElementById("coinTier")
-    .textContent =
-    `${coinData.name} Tier ${tier}`;
-}
+setInterval(saveGame,5000);
