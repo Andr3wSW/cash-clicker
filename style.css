@@ -117,3 +117,34 @@ body{
     }
 
 }
+
+.floatingMoney{
+
+    position:absolute;
+
+    color:#2e7d32;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    pointer-events:none;
+
+    animation:floatUp 1s forwards;
+
+    z-index:1000;
+}
+
+@keyframes floatUp{
+
+    0%{
+        opacity:1;
+        transform:translateY(0px);
+    }
+
+    100%{
+        opacity:0;
+        transform:translateY(-100px);
+    }
+
+}
