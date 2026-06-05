@@ -1,0 +1,21 @@
+body{
+    background:#111;
+    color:#00ff00;
+    text-align:center;
+    font-family:monospace;
+}
+
+#money{
+    font-size:48px;
+    margin:20px;
+}
+
+#cashButton{
+    font-size:30px;
+    padding:20px;
+    cursor:pointer;
+}
+
+#shop{
+    margin-top:40px;
+}
