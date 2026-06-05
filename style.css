@@ -194,3 +194,41 @@ body{
     }
 
 }
+
+.casinoGame{
+
+    background:white;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    margin-bottom:20px;
+
+    box-shadow:
+    0 2px 10px rgba(0,0,0,.1);
+}
+
+.casinoGame button{
+
+    margin:5px;
+
+    padding:10px 20px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#4caf50;
+
+    color:white;
+
+    cursor:pointer;
+}
+
+.casinoGame input{
+
+    padding:8px;
+
+    width:100px;
+}
