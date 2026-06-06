@@ -12,7 +12,11 @@
 
 <div id="app">
 
+    <!-- SIDEBAR -->
+
     <div id="sidebar">
+
+        <div id="sidebarMoney">$0</div>
 
         <h2>💰 Money Menu</h2>
 
@@ -38,6 +42,8 @@
 
     </div>
 
+    <!-- CONTENT -->
+
     <div id="content">
 
         <!-- CLICKER -->
@@ -48,10 +54,16 @@
 
             <div id="money">$0</div>
 
-            <h2 id="coinTier">Copper Tier 1</h2>
+            <h2 id="coinTier">
+                Copper Tier 1
+            </h2>
 
             <div id="coinContainer">
-                <div id="coin">¢</div>
+
+                <div id="coin">
+                    ¢
+                </div>
+
             </div>
 
             <button id="upgradeBtn">
@@ -64,7 +76,7 @@
 
         <div class="tab" id="casino">
 
-            <!-- MENU -->
+            <!-- CASINO MENU -->
 
             <div id="casinoMenu">
 
@@ -77,27 +89,67 @@
                 <div class="casinoGrid">
 
                     <div class="casinoCard" data-game="coinflip">
-                        <div class="casinoIcon">🪙</div>
-                        <h2>Coin Flip</h2>
-                        <p>50/50 chance to double your bet.</p>
+
+                        <div class="casinoIcon">
+                            🪙
+                        </div>
+
+                        <h2>
+                            Coin Flip
+                        </h2>
+
+                        <p>
+                            Double your money with a 50/50 chance.
+                        </p>
+
                     </div>
 
                     <div class="casinoCard" data-game="dice">
-                        <div class="casinoIcon">🎲</div>
-                        <h2>Dice Roll</h2>
-                        <p>Roll a 5 or 6 for a big payout.</p>
+
+                        <div class="casinoIcon">
+                            🎲
+                        </div>
+
+                        <h2>
+                            Dice Roll
+                        </h2>
+
+                        <p>
+                            Roll high for a big payout.
+                        </p>
+
                     </div>
 
                     <div class="casinoCard" data-game="slots">
-                        <div class="casinoIcon">🎰</div>
-                        <h2>Slots</h2>
-                        <p>Match symbols for jackpots.</p>
+
+                        <div class="casinoIcon">
+                            🎰
+                        </div>
+
+                        <h2>
+                            Slots
+                        </h2>
+
+                        <p>
+                            Match symbols to win jackpots.
+                        </p>
+
                     </div>
 
                     <div class="casinoCard" data-game="blackjack">
-                        <div class="casinoIcon">🃏</div>
-                        <h2>Blackjack</h2>
-                        <p>Closest to 21 wins.</p>
+
+                        <div class="casinoIcon">
+                            🃏
+                        </div>
+
+                        <h2>
+                            Blackjack
+                        </h2>
+
+                        <p>
+                            Beat the dealer without busting.
+                        </p>
+
                     </div>
 
                 </div>
@@ -112,7 +164,11 @@
                     ← Back To Casino
                 </button>
 
-                <div id="gameContent"></div>
+                <div id="gameContent">
+
+                    <!-- Games load here -->
+
+                </div>
 
             </div>
 
