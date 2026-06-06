@@ -416,6 +416,26 @@ body{
     inset 0 0 0 10px #e6a800;
 }
 
+.tailsCoin{
+    width:180px;
+    height:180px;
+
+    border-radius:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:70px;
+    font-weight:bold;
+
+    color:white;
+
+    background:linear-gradient(135deg,#555,#222);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
 .flipAnimation{
     animation:
     flipAnim 1s;
@@ -634,4 +654,20 @@ body{
     color:#2e7d32;
 
     z-index:999;
+}
+
+.winFlash{
+    animation:winFlash 0.6s ease;
+}
+
+@keyframes winFlash{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.15); filter:brightness(1.5);}
+    100%{transform:scale(1);}
+}
+
+#betMessage{
+    color:#c62828;
+    font-weight:bold;
+    margin-top:10px;
 }

@@ -500,150 +500,91 @@ function loadCoinFlip(){
 
         <h1>Coin Flip</h1>
 
-        <input
-        id="bet"
-        class="betInput"
-        type="number"
-        value="10">
+        <input id="bet" class="betInput" type="number" value="10">
 
-        <div
-        id="flipCoin"
-        class="flipCoin">
+        <div id="flipCoin" class="flipCoin"></div>
 
-            <div
-            class="headsCoin">
-
-                $
-
-            </div>
-
-        </div>
-
-        <button
-        class="playBtn"
-        id="headsBtn">
-
-            Heads
-
-        </button>
-
-        <button
-        class="playBtn"
-        id="tailsBtn">
-
-            Tails
-
-        </button>
+        <button class="playBtn" id="headsBtn">Heads</button>
+        <button class="playBtn" id="tailsBtn">Tails</button>
 
         <p id="result"></p>
 
     </div>
+
     `;
 
-    document
-    .getElementById(
-        "headsBtn"
-    )
-    .onclick =
-    ()=>playCoinFlip(
-        "heads"
-    );
+    const coin = document.getElementById("flipCoin");
+    const result = document.getElementById("result");
 
-    document
-    .getElementById(
-        "tailsBtn"
-    )
-    .onclick =
-    ()=>playCoinFlip(
-        "tails"
-    );
+    function setHeads(){
+        coin.className = "flipCoin";
+        coin.innerHTML = "$";
+    }
 
+    function setTails(){
+        coin.className = "tailsCoin";
+        coin.innerHTML = "T";
+    }
+
+    setHeads();
+
+    document.getElementById("headsBtn").onclick =
+    () => playCoinFlip("heads", coin, result, setHeads, setTails);
+
+    document.getElementById("tailsBtn").onclick =
+    () => playCoinFlip("tails", coin, result, setHeads, setTails);
 }
 
-function playCoinFlip(choice){
+function playCoinFlip(choice, coin, resultEl, setHeads, setTails){
 
-    const bet =
-    Number(
-        document
-        .getElementById(
-            "bet"
-        ).value
-    );
+    const betInput = document.getElementById("bet");
+    const betAmount = Number(betInput.value);
 
-    if(
-        bet <= 0 ||
-        bet > money
-    )
+    // BET VALIDATION
+    if(betAmount <= 0 || betAmount > money){
+        showBetError("Can't bet more than you have");
         return;
+    }
 
-    const coinEl =
-    document.getElementById(
-        "flipCoin"
-    );
+    // lock buttons during animation
+    document.getElementById("headsBtn").disabled = true;
+    document.getElementById("tailsBtn").disabled = true;
 
-    coinEl.classList.add(
-        "flipAnimation"
-    );
+    // flip animation
+    coin.classList.add("flipAnimation");
 
-    setTimeout(()=>{
+    setTimeout(() => {
 
-        coinEl.classList.remove(
-            "flipAnimation"
-        );
+        coin.classList.remove("flipAnimation");
 
-        const result =
-        Math.random() < .5
-        ? "heads"
-        : "tails";
+        const result = Math.random() < 0.5 ? "heads" : "tails";
 
-        if(result==="heads"){
+        // update visual coin
+        if(result === "heads") setHeads();
+        else setTails();
 
-            coinEl.innerHTML =
-            `
-            <div class="headsCoin">
-                $
-            </div>
-            `;
+        money -= betAmount;
 
-        }else{
+        if(choice === result){
 
-            coinEl.innerHTML =
-            `
-            <div style="
-                font-size:90px;
-            ">
-                🪙
-            </div>
-            `;
+            money += betAmount * 2;
 
-        }
+            resultEl.textContent = `WIN! (${result})`;
 
-        money -= bet;
+            winAnimation();
 
-        if(
-            choice === result
-        ){
+        } else {
 
-            money +=
-            bet * 2;
-
-            resultEl(
-                "You Won!"
-            );
-
-        }
-        else{
-
-            resultEl(
-                "You Lost!"
-            );
-
+            resultEl.textContent = `LOSS! (${result})`;
         }
 
         updateUI();
 
-    },1000);
+        // unlock buttons
+        document.getElementById("headsBtn").disabled = false;
+        document.getElementById("tailsBtn").disabled = false;
 
+    }, 900);
 }
 
 // =====================================
@@ -704,11 +645,10 @@ function playDice(){
         ).value
     );
 
-    if(
-        bet <= 0 ||
-        bet > money
-    )
+    if(bet <= 0 || bet > money){
+        showBetError("Can't bet more than you have");
         return;
+    }
 
     const dice =
     document
@@ -777,6 +717,8 @@ function finishDice(
             `WIN (${roll})`
         );
 
+        winAnimation();
+
     }
     else{
 
@@ -842,8 +784,10 @@ function playSlots(){
         .value
     );
 
-    if(bet <= 0 || bet > money)
+    if(bet <= 0 || bet > money){
+        showBetError("Can't bet more than you have");
         return;
+    }
 
     const symbols =
     ["🍒","🍋","⭐","💎","7️⃣"];
@@ -1037,8 +981,10 @@ function startBlackjack(){
     const bet =
     Number(document.getElementById("bet").value);
 
-    if(bet <= 0 || bet > money)
+    if(bet <= 0 || bet > money){
+        showBetError("Can't bet more than you have");
         return;
+    }
 
     blackjackBet = bet;
 
@@ -1146,6 +1092,8 @@ function resolveBlackjack(){
         money += blackjackBet * 2;
         resultEl(`YOU WIN (${player} vs ${dealer})`);
 
+        winAnimation();
+
     }
     else if(player === dealer){
 
@@ -1171,7 +1119,7 @@ updateUI();
 
 const emailInput = document.getElementById("email");
 const passInput = document.getElementById("password");
-const usernameInput = document.getElementById("username");
+
 
 const loginBtn = document.getElementById("loginBtn");
 const registerBtn = document.getElementById("registerBtn");
@@ -1239,3 +1187,36 @@ onAuthStateChanged(auth, async (user) => {
     await loadCloudSave();
 
 });
+
+function winAnimation(){
+
+    const panel =
+    document.querySelector(".gamePanel");
+
+    if(!panel) return;
+
+    panel.classList.add("winFlash");
+
+    setTimeout(()=>{
+        panel.classList.remove("winFlash");
+    },600);
+
+}
+
+function showBetError(msg){
+
+    let el = document.getElementById("betMessage");
+
+    if(!el){
+        el = document.createElement("div");
+        el.id = "betMessage";
+        document.querySelector(".gamePanel").appendChild(el);
+    }
+
+    el.textContent = msg;
+
+    setTimeout(()=>{
+        el.textContent = "";
+    },2000);
+
+}
