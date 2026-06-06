@@ -232,3 +232,38 @@ body{
 
     width:100px;
 }
+
+#casinoMenu{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.casinoSelect{
+    width:260px;
+    padding:18px;
+    margin:10px;
+    border:none;
+    border-radius:12px;
+    background:white;
+    box-shadow:0 4px 12px rgba(0,0,0,.1);
+    font-size:20px;
+    cursor:pointer;
+}
+
+.casinoSelect:hover{
+    transform:translateY(-2px);
+}
+
+#casinoGameView{
+    text-align:center;
+}
+
+#backCasino{
+    padding:10px 18px;
+    border:none;
+    background:#e8f5e9;
+    border-radius:10px;
+    cursor:pointer;
+    margin-bottom:20px;
+}
