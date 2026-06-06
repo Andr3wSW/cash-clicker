@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cash Clicker</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,16 +13,34 @@
 <div id="app">
 
     <div id="sidebar">
-        <h2>Money Menu</h2>
 
-        <button class="tabBtn" data-tab="clicker">💰 Clicker</button>
-        <button class="tabBtn" data-tab="casino">🎰 Casino</button>
-        <button class="tabBtn" data-tab="stocks">📈 Stocks</button>
-        <button class="tabBtn" data-tab="duels">⚔️ Duels</button>
-        <button class="tabBtn" data-tab="leaderboards">🏆 Leaderboards</button>
+        <h2>💰 Money Menu</h2>
+
+        <button class="tabBtn" data-tab="clicker">
+            💰 Clicker
+        </button>
+
+        <button class="tabBtn" data-tab="casino">
+            🎰 Casino
+        </button>
+
+        <button class="tabBtn" data-tab="stocks">
+            📈 Stocks
+        </button>
+
+        <button class="tabBtn" data-tab="duels">
+            ⚔️ Duels
+        </button>
+
+        <button class="tabBtn" data-tab="leaderboards">
+            🏆 Leaderboards
+        </button>
+
     </div>
 
     <div id="content">
+
+        <!-- CLICKER -->
 
         <div class="tab active" id="clicker">
 
@@ -37,78 +57,101 @@
             <button id="upgradeBtn">
                 Upgrade Coin ($10)
             </button>
+
         </div>
 
-       <div class="tab" id="casino">
+        <!-- CASINO -->
+
+        <div class="tab" id="casino">
+
+            <!-- MENU -->
 
             <div id="casinoMenu">
-        
+
                 <h1>🎰 Casino</h1>
-        
-                <button class="casinoSelect" data-game="coinflip">🪙 Coin Flip</button>
-                <button class="casinoSelect" data-game="dice">🎲 Dice</button>
-                <button class="casinoSelect" data-game="slots">🎰 Slots</button>
-                <button class="casinoSelect" data-game="blackjack">🃏 Blackjack</button>
-        
+
+                <p class="casinoSubtitle">
+                    Choose a game
+                </p>
+
+                <div class="casinoGrid">
+
+                    <div class="casinoCard" data-game="coinflip">
+                        <div class="casinoIcon">🪙</div>
+                        <h2>Coin Flip</h2>
+                        <p>50/50 chance to double your bet.</p>
+                    </div>
+
+                    <div class="casinoCard" data-game="dice">
+                        <div class="casinoIcon">🎲</div>
+                        <h2>Dice Roll</h2>
+                        <p>Roll a 5 or 6 for a big payout.</p>
+                    </div>
+
+                    <div class="casinoCard" data-game="slots">
+                        <div class="casinoIcon">🎰</div>
+                        <h2>Slots</h2>
+                        <p>Match symbols for jackpots.</p>
+                    </div>
+
+                    <div class="casinoCard" data-game="blackjack">
+                        <div class="casinoIcon">🃏</div>
+                        <h2>Blackjack</h2>
+                        <p>Closest to 21 wins.</p>
+                    </div>
+
+                </div>
+
             </div>
-        
+
+            <!-- GAME VIEW -->
+
             <div id="casinoGameView" style="display:none;">
-        
-                <button id="backCasino">← Back</button>
-        
+
+                <button id="backCasino">
+                    ← Back To Casino
+                </button>
+
                 <div id="gameContent"></div>
-        
+
             </div>
-        
+
         </div>
-        
-            <hr>
-        
-            <div class="casinoGame">
-        
-                <h2>Slots</h2>
-        
-                <input id="slotBet" type="number" min="1" value="10">
-        
-                <button id="spinSlots">
-                    Spin
-                </button>
-        
-                <p id="slotResult"></p>
-        
-            </div>
-        
-            <hr>
-        
-            <div class="casinoGame">
-        
-                <h2>Blackjack</h2>
-        
-                <input id="bjBet" type="number" min="1" value="10">
-        
-                <button id="playBJ">
-                    Deal
-                </button>
-        
-                <p id="bjResult"></p>
-        
-            </div>
-        
-        </div>
+
+        <!-- STOCKS -->
 
         <div class="tab" id="stocks">
-            <h1>Stocks</h1>
-            <p>Coming Soon</p>
+
+            <h1>📈 Stocks</h1>
+
+            <p>
+                Coming Soon
+            </p>
+
         </div>
+
+        <!-- DUELS -->
 
         <div class="tab" id="duels">
-            <h1>Duels</h1>
-            <p>Coming Soon</p>
+
+            <h1>⚔️ Duels</h1>
+
+            <p>
+                Coming Soon
+            </p>
+
         </div>
 
+        <!-- LEADERBOARDS -->
+
         <div class="tab" id="leaderboards">
-            <h1>Leaderboards</h1>
-            <p>Coming Soon</p>
+
+            <h1>🏆 Leaderboards</h1>
+
+            <p>
+                Coming Soon
+            </p>
+
         </div>
 
     </div>
