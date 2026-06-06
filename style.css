@@ -1,9 +1,16 @@
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
     font-family:Arial,sans-serif;
     background:#f5f7f8;
     text-align:center;
+    overflow:hidden;
 }
+
+/* APP */
 
 #app{
     display:flex;
@@ -15,17 +22,19 @@ body{
     background:white;
     border-right:2px solid #dddddd;
     padding:15px;
+    z-index:10;
 }
 
 .tabBtn{
     width:100%;
     padding:12px;
-    margin-bottom:8px;
+    margin-bottom:10px;
     border:none;
     border-radius:10px;
     background:#e8f5e9;
     cursor:pointer;
     font-size:16px;
+    transition:.2s;
 }
 
 .tabBtn:hover{
@@ -35,6 +44,7 @@ body{
 #content{
     flex:1;
     padding:25px;
+    overflow-y:auto;
 }
 
 .tab{
@@ -44,6 +54,8 @@ body{
 .tab.active{
     display:block;
 }
+
+/* MONEY */
 
 #money{
     font-size:60px;
@@ -55,6 +67,8 @@ body{
     margin-top:20px;
 }
 
+/* CLICKER COIN */
+
 #coinContainer{
     display:flex;
     justify-content:center;
@@ -65,11 +79,14 @@ body{
     width:180px;
     height:180px;
     border-radius:50%;
+
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
+
     font-size:70px;
     font-weight:bold;
+
     cursor:pointer;
     user-select:none;
 
@@ -79,9 +96,11 @@ body{
         #a65b1d
     );
 
-    box-shadow:0 8px 20px rgba(0,0,0,.2);
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.2);
 
-    transition:transform .15s;
+    transition:
+        transform .15s;
 }
 
 #coin:hover{
@@ -89,16 +108,19 @@ body{
 }
 
 #coin:active{
-    transform:scale(0.8)
+    transform:scale(.85);
 }
 
 #upgradeBtn{
     padding:15px 30px;
     font-size:18px;
+
     border:none;
     border-radius:10px;
+
     background:#4caf50;
     color:white;
+
     cursor:pointer;
 }
 
@@ -106,58 +128,43 @@ body{
     background:#43a047;
 }
 
-@keyframes spin{
-
-    from{
-        transform:rotateY(0deg);
-    }
-
-    to{
-        transform:rotateY(360deg);
-    }
-
-}
+/* FLOATING MONEY */
 
 .floatingMoney{
 
     position:absolute;
 
-    color:#2e7d32;
-
     font-size:28px;
-
     font-weight:bold;
+
+    color:#2e7d32;
 
     pointer-events:none;
 
     animation:floatUp 1s forwards;
-
-    z-index:1000;
 }
 
 @keyframes floatUp{
 
-    0%{
+    from{
         opacity:1;
         transform:translateY(0px);
     }
 
-    100%{
+    to{
         opacity:0;
         transform:translateY(-100px);
     }
 
 }
 
+/* MONEY RAIN */
+
 #moneyRain{
 
     position:fixed;
 
-    top:0;
-    left:0;
-
-    width:100%;
-    height:100%;
+    inset:0;
 
     overflow:hidden;
 
@@ -172,52 +179,142 @@ body{
 
     color:rgba(76,175,80,.2);
 
-    font-size:30px;
-
     animation:fall linear forwards;
 }
 
 @keyframes fall{
 
     from{
-
-        transform:
-        translateY(-50px);
-
+        transform:translateY(-60px);
     }
 
     to{
-
-        transform:
-        translateY(110vh);
-
+        transform:translateY(110vh);
     }
 
 }
 
-.casinoGame{
+/* COIN SPIN */
+
+@keyframes spin{
+
+    from{
+        transform:rotateY(0deg);
+    }
+
+    to{
+        transform:rotateY(360deg);
+    }
+
+}
+
+/* CASINO MENU */
+
+.casinoSubtitle{
+    opacity:.7;
+}
+
+.casinoGrid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(260px,1fr));
+
+    gap:20px;
+
+    max-width:1100px;
+
+    margin:auto;
+}
+
+.casinoCard{
 
     background:white;
 
-    padding:15px;
+    border-radius:18px;
 
-    border-radius:12px;
+    padding:25px;
 
-    margin-bottom:20px;
+    cursor:pointer;
+
+    transition:.2s;
 
     box-shadow:
-    0 2px 10px rgba(0,0,0,.1);
+    0 4px 15px rgba(0,0,0,.08);
 }
 
-.casinoGame button{
+.casinoCard:hover{
 
-    margin:5px;
+    transform:translateY(-5px);
 
-    padding:10px 20px;
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.12);
+}
+
+.casinoIcon{
+
+    font-size:50px;
+}
+
+/* GAME VIEW */
+
+#casinoGameView{
+
+    max-width:900px;
+
+    margin:auto;
+}
+
+#backCasino{
 
     border:none;
 
-    border-radius:8px;
+    background:#e8f5e9;
+
+    padding:12px 18px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    margin-bottom:25px;
+}
+
+.gamePanel{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,.08);
+}
+
+.betInput{
+
+    padding:12px;
+
+    border-radius:10px;
+
+    border:1px solid #ccc;
+
+    width:150px;
+
+    text-align:center;
+}
+
+.playBtn{
+
+    padding:12px 20px;
+
+    margin:8px;
+
+    border:none;
+
+    border-radius:10px;
 
     background:#4caf50;
 
@@ -226,44 +323,172 @@ body{
     cursor:pointer;
 }
 
-.casinoGame input{
+.playBtn:hover{
+    background:#43a047;
+}
 
-    padding:8px;
+/* COIN FLIP */
+
+.flipCoin{
+
+    width:180px;
+    height:180px;
+
+    margin:25px auto;
+
+    border-radius:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:70px;
+
+    background:
+    linear-gradient(
+        135deg,
+        gold,
+        orange
+    );
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.2);
+}
+
+.flipAnimation{
+    animation:flipAnim 1s;
+}
+
+@keyframes flipAnim{
+
+    0%{
+        transform:rotateY(0deg);
+    }
+
+    100%{
+        transform:rotateY(1800deg);
+    }
+
+}
+
+/* DICE */
+
+.diceBox{
+
+    width:150px;
+    height:150px;
+
+    margin:20px auto;
+
+    background:white;
+
+    border:4px solid #222;
+
+    border-radius:20px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:70px;
+}
+
+.rollAnimation{
+    animation:rollDice .8s;
+}
+
+@keyframes rollDice{
+
+    0%{
+        transform:rotate(0deg);
+    }
+
+    100%{
+        transform:rotate(720deg);
+    }
+
+}
+
+/* SLOTS */
+
+.slotMachine{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    margin:30px;
+}
+
+.slot{
 
     width:100px;
-}
+    height:100px;
 
-#casinoMenu{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-}
-
-.casinoSelect{
-    width:260px;
-    padding:18px;
-    margin:10px;
-    border:none;
-    border-radius:12px;
     background:white;
-    box-shadow:0 4px 12px rgba(0,0,0,.1);
-    font-size:20px;
-    cursor:pointer;
+
+    border:3px solid #ddd;
+
+    border-radius:15px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:50px;
 }
 
-.casinoSelect:hover{
-    transform:translateY(-2px);
+.slotSpin{
+    animation:slotSpin .7s;
 }
 
-#casinoGameView{
-    text-align:center;
+@keyframes slotSpin{
+
+    0%{
+        transform:translateY(-30px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+
 }
 
-#backCasino{
-    padding:10px 18px;
-    border:none;
-    background:#e8f5e9;
-    border-radius:10px;
-    cursor:pointer;
-    margin-bottom:20px;
+/* BLACKJACK */
+
+.cardArea{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    margin:25px;
+
+    flex-wrap:wrap;
+}
+
+.card{
+
+    width:90px;
+    height:130px;
+
+    background:white;
+
+    border-radius:12px;
+
+    border:2px solid #ccc;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:32px;
+    font-weight:bold;
+
+    box-shadow:
+    0 4px 10px rgba(0,0,0,.1);
 }
