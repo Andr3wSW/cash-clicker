@@ -907,8 +907,6 @@ function finishSlots(bet){
 // =====================================
 
 let deck = [];
-let playerHand = [];
-let dealerHand = [];
 let standMode = false;
 
 // create deck
