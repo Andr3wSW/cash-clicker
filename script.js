@@ -1125,7 +1125,6 @@ function resolveBlackjack(){
 // START GAME
 // =====================================
 
-loadGame();
 updateUI();
 
 const emailInput = document.getElementById("email");
