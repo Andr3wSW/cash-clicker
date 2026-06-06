@@ -39,38 +39,28 @@
             </button>
         </div>
 
-        <div class="tab" id="casino">
+       <div class="tab" id="casino">
 
-            <h1>🎰 Casino</h1>
+            <div id="casinoMenu">
         
-            <div class="casinoGame">
+                <h1>🎰 Casino</h1>
         
-                <h2>Coin Flip</h2>
-        
-                <input id="coinBet" type="number" min="1" value="10">
-        
-                <button id="flipHeads">Heads</button>
-                <button id="flipTails">Tails</button>
-        
-                <p id="coinResult"></p>
+                <button class="casinoSelect" data-game="coinflip">🪙 Coin Flip</button>
+                <button class="casinoSelect" data-game="dice">🎲 Dice</button>
+                <button class="casinoSelect" data-game="slots">🎰 Slots</button>
+                <button class="casinoSelect" data-game="blackjack">🃏 Blackjack</button>
         
             </div>
         
-            <hr>
+            <div id="casinoGameView" style="display:none;">
         
-            <div class="casinoGame">
+                <button id="backCasino">← Back</button>
         
-                <h2>Dice Roll</h2>
-        
-                <input id="diceBet" type="number" min="1" value="10">
-        
-                <button id="rollDice">
-                    Roll Dice
-                </button>
-        
-                <p id="diceResult"></p>
+                <div id="gameContent"></div>
         
             </div>
+        
+        </div>
         
             <hr>
         
