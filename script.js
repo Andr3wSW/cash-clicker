@@ -416,10 +416,17 @@ function loadCoinFlip(){
 
 function playCoinFlip(choice){
 
-    const bet =
-    Number(bet.value);
+    const betAmount =
+    Number(
+        document
+        .getElementById("bet")
+        .value
+    );
 
-    if(bet<=0 || bet>money)
+    if(
+        betAmount <= 0 ||
+        betAmount > money
+    )
         return;
 
     const coinEl =
@@ -438,16 +445,15 @@ function playCoinFlip(choice){
         );
 
         const result =
-        Math.random()<.5
+        Math.random() < .5
         ? "heads"
         : "tails";
 
-        money -= bet;
+        money -= betAmount;
 
-        if(choice===result){
+        if(choice === result){
 
-            money +=
-            bet*2;
+            money += betAmount * 2;
 
             resultEl(
                 `You Won! (${result})`
@@ -458,6 +464,7 @@ function playCoinFlip(choice){
             resultEl(
                 `You Lost! (${result})`
             );
+
         }
 
         updateUI();
