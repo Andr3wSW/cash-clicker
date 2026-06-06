@@ -269,6 +269,174 @@ function spawnDollar(){
 
 setInterval(spawnDollar,400);
 
+const casinoMenu = document.getElementById("casinoMenu");
+const casinoGameView = document.getElementById("casinoGameView");
+const gameContent = document.getElementById("gameContent");
+const backCasino = document.getElementById("backCasino");
+
+backCasino.onclick = ()=>{
+
+    casinoGameView.style.display = "none";
+    casinoMenu.style.display = "flex";
+
+    gameContent.innerHTML = "";
+};
+
+document.querySelectorAll(".casinoSelect")
+.forEach(btn=>{
+
+    btn.onclick = ()=>{
+
+        const game = btn.dataset.game;
+
+        casinoMenu.style.display = "none";
+        casinoGameView.style.display = "block";
+
+        loadCasinoGame(game);
+    };
+
+});
+
+function loadCasinoGame(game){
+
+    gameContent.innerHTML = "";
+
+    if(game === "coinflip"){
+
+        gameContent.innerHTML = `
+            <h1>Coin Flip</h1>
+
+            <input id="coinBet" type="number" value="10">
+
+            <br><br>
+
+            <button id="flipHeads">Heads</button>
+            <button id="flipTails">Tails</button>
+
+            <p id="coinResult"></p>
+        `;
+
+        flipHeads.onclick = ()=>coinFlip("heads");
+        flipTails.onclick = ()=>coinFlip("tails");
+    }
+
+    if(game === "dice"){
+
+        gameContent.innerHTML = `
+            <h1>Dice Roll</h1>
+
+            <input id="diceBet" type="number" value="10">
+            <br><br>
+
+            <button id="rollDice">Roll</button>
+
+            <p id="diceResult"></p>
+        `;
+
+        rollDice.onclick = ()=>{
+
+            const bet = Number(diceBet.value);
+
+            if(bet <= 0 || bet > money) return;
+
+            money -= bet;
+
+            const roll = Math.floor(Math.random()*6)+1;
+
+            if(roll >= 5){
+                money += bet * 3;
+                diceResult.textContent = `WIN (${roll})`;
+            } else {
+                diceResult.textContent = `LOSE (${roll})`;
+            }
+
+            updateUI();
+        };
+    }
+
+    if(game === "slots"){
+
+        gameContent.innerHTML = `
+            <h1>Slots</h1>
+
+            <input id="slotBet" type="number" value="10">
+
+            <br><br>
+
+            <button id="spinSlots">Spin</button>
+
+            <p id="slotResult"></p>
+        `;
+
+        spinSlots.onclick = ()=>{
+
+            const bet = Number(slotBet.value);
+
+            if(bet <= 0 || bet > money) return;
+
+            money -= bet;
+
+            const s = ["🍒","🍋","⭐","💎"];
+
+            const a = s[Math.floor(Math.random()*4)];
+            const b = s[Math.floor(Math.random()*4)];
+            const c = s[Math.floor(Math.random()*4)];
+
+            let payout = 0;
+
+            if(a===b && b===c) payout = 10;
+            else if(a===b || b===c) payout = 2;
+
+            money += bet * payout;
+
+            slotResult.textContent = `${a} ${b} ${c}`;
+
+            updateUI();
+        };
+    }
+
+    if(game === "blackjack"){
+
+        gameContent.innerHTML = `
+            <h1>Blackjack</h1>
+
+            <input id="bjBet" type="number" value="10">
+
+            <br><br>
+
+            <button id="playBJ">Deal</button>
+
+            <p id="bjResult"></p>
+        `;
+
+        playBJ.onclick = ()=>{
+
+            const bet = Number(bjBet.value);
+
+            if(bet <= 0 || bet > money) return;
+
+            money -= bet;
+
+            const player = Math.floor(Math.random()*11)+11;
+            const dealer = Math.floor(Math.random()*11)+11;
+
+            if(player > dealer){
+
+                money += bet * 2;
+                bjResult.textContent =
+                `WIN P:${player} D:${dealer}`;
+
+            } else {
+
+                bjResult.textContent =
+                `LOSE P:${player} D:${dealer}`;
+            }
+
+            updateUI();
+        };
+    }
+}
+
 function coinFlip(choice){
 
     const bet =
