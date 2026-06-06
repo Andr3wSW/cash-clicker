@@ -288,6 +288,9 @@ async function loadCloudSave(){
     clickPower = data.clickPower ?? 1;
     upgradeCost = data.upgradeCost ?? 10;
 
+    document.getElementById("userDisplay").textContent =
+        data.username || "Player";
+
     updateUI();
 
 }
@@ -1168,6 +1171,7 @@ updateUI();
 
 const emailInput = document.getElementById("email");
 const passInput = document.getElementById("password");
+const usernameInput = document.getElementById("username");
 
 const loginBtn = document.getElementById("loginBtn");
 const registerBtn = document.getElementById("registerBtn");
@@ -1179,18 +1183,27 @@ registerBtn.onclick = async () => {
 
     try {
 
-        await createUserWithEmailAndPassword(
+        const userCred = await createUserWithEmailAndPassword(
             auth,
             emailInput.value,
             passInput.value
         );
 
+        const uid = userCred.user.uid;
+
+        await setDoc(doc(db, "players", uid), {
+
+            username: usernameInput.value,
+            money: 0,
+            clickPower: 1,
+            upgradeCost: 10
+
+        });
+
         status.textContent = "Account created!";
 
     } catch (e) {
-
         status.textContent = e.message;
-
     }
 
 };
