@@ -222,47 +222,41 @@ upgradeBtn.addEventListener(
 // SAVE SYSTEM
 // =====================================
 
-function saveGame(){
+async function saveToCloud(){
 
-    localStorage.setItem(
-        "cashClickerSave",
-        JSON.stringify({
+    if(!uid) return;
 
-            money,
-            clickPower,
-            upgradeCost
+    await setDoc(doc(db, "players", uid), {
 
-        })
-    );
+        money,
+        clickPower,
+        upgradeCost
+
+    });
+
 }
 
-function loadGame(){
+async function loadCloudSave(){
 
-    const save =
-    JSON.parse(
-        localStorage.getItem(
-            "cashClickerSave"
-        )
-    );
+    const ref = doc(db, "players", uid);
+    const snap = await getDoc(ref);
 
-    if(!save)
-        return;
+    if(!snap.exists()) return;
 
-    money =
-    save.money || 0;
+    const data = snap.data();
 
-    clickPower =
-    save.clickPower || 1;
+    money = data.money ?? 0;
+    clickPower = data.clickPower ?? 1;
+    upgradeCost = data.upgradeCost ?? 10;
 
-    upgradeCost =
-    save.upgradeCost || 10;
+    updateUI();
+
 }
 
-setInterval(
-    saveGame,
-    5000
-);
-
+function logout(){
+    signOut(auth);
+    location.reload();
+}
 // =====================================
 // MONEY RAIN
 // =====================================
@@ -1133,3 +1127,64 @@ function resolveBlackjack(){
 
 loadGame();
 updateUI();
+
+const emailInput = document.getElementById("email");
+const passInput = document.getElementById("password");
+
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+
+const authBox = document.getElementById("authBox");
+const status = document.getElementById("authStatus");
+
+registerBtn.onclick = async () => {
+
+    try {
+
+        await createUserWithEmailAndPassword(
+            auth,
+            emailInput.value,
+            passInput.value
+        );
+
+        status.textContent = "Account created!";
+
+    } catch (e) {
+
+        status.textContent = e.message;
+
+    }
+
+};
+
+loginBtn.onclick = async () => {
+
+    try {
+
+        await signInWithEmailAndPassword(
+            auth,
+            emailInput.value,
+            passInput.value
+        );
+
+        status.textContent = "Logged in!";
+
+    } catch (e) {
+
+        status.textContent = e.message;
+
+    }
+
+};
+
+onAuthStateChanged(auth, async (user) => {
+
+    if(!user) return;
+
+    uid = user.uid;
+
+    authBox.style.display = "none";
+
+    await loadCloudSave();
+
+});
