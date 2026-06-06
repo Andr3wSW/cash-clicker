@@ -1,60 +1,90 @@
-// ======================
-// GAME DATA
-// ======================
+// =====================================
+// CASH CLICKER
+// =====================================
 
 let money = 0;
 let clickPower = 1;
 let upgradeCost = 10;
 
-// ======================
-// CLICKER
-// ======================
+// =====================================
+// BLACKJACK DATA
+// =====================================
 
-const moneyDisplay = document.getElementById("money");
-const coin = document.getElementById("coin");
-const coinTier = document.getElementById("coinTier");
-const upgradeBtn = document.getElementById("upgradeBtn");
+let blackjackBet = 0;
+let playerHand = [];
+let dealerHand = [];
+let blackjackActive = false;
+
+// =====================================
+// UI REFERENCES
+// =====================================
+
+const moneyDisplay =
+document.getElementById("money");
+
+const sidebarMoney =
+document.getElementById("sidebarMoney");
+
+const coin =
+document.getElementById("coin");
+
+const coinTier =
+document.getElementById("coinTier");
+
+const upgradeBtn =
+document.getElementById("upgradeBtn");
+
+// =====================================
+// COIN STAGES
+// =====================================
 
 const coinStages = [
+
 {
     name:"Copper",
     symbol:"¢",
     color1:"#c97b3b",
     color2:"#a65b1d"
 },
+
 {
     name:"Silver",
     symbol:"S",
     color1:"#dddddd",
     color2:"#999999"
 },
+
 {
     name:"Gold",
     symbol:"$",
     color1:"#ffd54f",
     color2:"#ffb300"
 },
+
 {
     name:"Diamond",
     symbol:"♦",
     color1:"#80deea",
     color2:"#26c6da"
 },
+
 {
     name:"Crypto",
     symbol:"₿",
     color1:"#ab47bc",
     color2:"#6a1b9a"
 }
+
 ];
 
-// ======================
-// UI
-// ======================
+// =====================================
+// UI UPDATE
+// =====================================
 
 function updateCoinVisual(){
 
-    const stage = Math.min(
+    const stage =
+    Math.min(
         Math.floor((clickPower-1)/5),
         4
     );
@@ -81,8 +111,15 @@ function updateCoinVisual(){
 
 function updateUI(){
 
+    const displayMoney =
+    "$" +
+    Math.floor(money);
+
     moneyDisplay.textContent =
-    "$" + Math.floor(money);
+    displayMoney;
+
+    sidebarMoney.textContent =
+    displayMoney;
 
     upgradeBtn.textContent =
     `Upgrade Coin ($${upgradeCost})`;
@@ -90,9 +127,9 @@ function updateUI(){
     updateCoinVisual();
 }
 
-// ======================
+// =====================================
 // FLOATING MONEY
-// ======================
+// =====================================
 
 function createFloatingMoney(amount){
 
@@ -109,75 +146,94 @@ function createFloatingMoney(amount){
     coin.getBoundingClientRect();
 
     popup.style.left =
-    (rect.left +
-    Math.random()*rect.width)
-    + "px";
+    (
+        rect.left +
+        Math.random()*rect.width
+    ) + "px";
 
     popup.style.top =
-    (rect.top +
-    Math.random()*rect.height)
-    + "px";
+    (
+        rect.top +
+        Math.random()*rect.height
+    ) + "px";
 
     document.body
     .appendChild(popup);
 
     setTimeout(()=>{
+
         popup.remove();
+
     },1000);
 }
 
-// ======================
+// =====================================
 // CLICKING
-// ======================
+// =====================================
 
-coin.addEventListener("click",()=>{
+coin.addEventListener(
+    "click",
+    ()=>{
 
-    money += clickPower;
+        money += clickPower;
 
-    createFloatingMoney(clickPower);
+        createFloatingMoney(
+            clickPower
+        );
 
-    updateUI();
-});
+        updateUI();
 
-upgradeBtn.addEventListener("click",()=>{
+    }
+);
 
-    if(money < upgradeCost)
-        return;
+upgradeBtn.addEventListener(
+    "click",
+    ()=>{
 
-    money -= upgradeCost;
+        if(
+            money < upgradeCost
+        ) return;
 
-    clickPower++;
+        money -= upgradeCost;
 
-    upgradeCost =
-    Math.floor(
-        upgradeCost*1.5
-    );
+        clickPower++;
 
-    coin.style.animation =
-    "spin .6s";
+        upgradeCost =
+        Math.floor(
+            upgradeCost * 1.5
+        );
 
-    setTimeout(()=>{
-        coin.style.animation="";
-    },600);
+        coin.style.animation =
+        "spin .6s";
 
-    updateUI();
-});
+        setTimeout(()=>{
 
-// ======================
+            coin.style.animation =
+            "";
+
+        },600);
+
+        updateUI();
+
+    }
+);
+
+// =====================================
 // PASSIVE MONEY
-// ======================
+// =====================================
 
 setInterval(()=>{
 
-    money += clickPower*0.2;
+    money +=
+    clickPower * 0.2;
 
     updateUI();
 
 },1000);
 
-// ======================
-// SAVE
-// ======================
+// =====================================
+// SAVE SYSTEM
+// =====================================
 
 function saveGame(){
 
@@ -202,23 +258,34 @@ function loadGame(){
         )
     );
 
-    if(!save) return;
+    if(!save)
+        return;
 
-    money = save.money;
-    clickPower = save.clickPower;
-    upgradeCost = save.upgradeCost;
+    money =
+    save.money || 0;
+
+    clickPower =
+    save.clickPower || 1;
+
+    upgradeCost =
+    save.upgradeCost || 10;
 }
 
-setInterval(saveGame,5000);
+setInterval(
+    saveGame,
+    5000
+);
 
-// ======================
+// =====================================
 // MONEY RAIN
-// ======================
+// =====================================
 
 function spawnDollar(){
 
     const dollar =
-    document.createElement("div");
+    document.createElement(
+        "div"
+    );
 
     dollar.className =
     "dollar";
@@ -231,19 +298,29 @@ function spawnDollar(){
     "vw";
 
     dollar.style.fontSize =
-    (20+Math.random()*40)
-    + "px";
+    (
+        20 +
+        Math.random()*40
+    ) + "px";
 
     dollar.style.animationDuration =
-    (5+Math.random()*8)
-    + "s";
+    (
+        5 +
+        Math.random()*8
+    ) + "s";
 
     document
-    .getElementById("moneyRain")
-    .appendChild(dollar);
+    .getElementById(
+        "moneyRain"
+    )
+    .appendChild(
+        dollar
+    );
 
     setTimeout(()=>{
+
         dollar.remove();
+
     },13000);
 }
 
@@ -252,9 +329,9 @@ setInterval(
     400
 );
 
-// ======================
+// =====================================
 // TABS
-// ======================
+// =====================================
 
 document
 .querySelectorAll(".tabBtn")
@@ -268,8 +345,9 @@ document
             .querySelectorAll(".tab")
             .forEach(tab=>{
 
-                tab.classList
-                .remove("active");
+                tab.classList.remove(
+                    "active"
+                );
 
             });
 
@@ -277,16 +355,18 @@ document
             .getElementById(
                 button.dataset.tab
             )
-            .classList
-            .add("active");
+            .classList.add(
+                "active"
+            );
+
         }
     );
 
 });
 
-// ======================
+// =====================================
 // CASINO NAVIGATION
-// ======================
+// =====================================
 
 const casinoMenu =
 document.getElementById(
@@ -304,7 +384,9 @@ document.getElementById(
 );
 
 document
-.querySelectorAll(".casinoCard")
+.querySelectorAll(
+    ".casinoCard"
+)
 .forEach(card=>{
 
     card.addEventListener(
@@ -321,7 +403,9 @@ document
 });
 
 document
-.getElementById("backCasino")
+.getElementById(
+    "backCasino"
+)
 .addEventListener(
     "click",
     ()=>{
@@ -335,9 +419,9 @@ document
     }
 );
 
-// ======================
+// =====================================
 // GAME LOADER
-// ======================
+// =====================================
 
 function openGame(game){
 
@@ -358,11 +442,32 @@ function openGame(game){
 
     if(game==="blackjack")
         loadBlackjack();
+
 }
 
-// ======================
+// =====================================
+// RESULT HELPER
+// =====================================
+
+function resultEl(text){
+
+    const result =
+    document.getElementById(
+        "result"
+    );
+
+    if(result){
+
+        result.textContent =
+        text;
+
+    }
+
+}
+
+// =====================================
 // COIN FLIP
-// ======================
+// =====================================
 
 function loadCoinFlip(){
 
@@ -382,7 +487,12 @@ function loadCoinFlip(){
         id="flipCoin"
         class="flipCoin">
 
-        🪙
+            <div
+            class="headsCoin">
+
+                $
+
+            </div>
 
         </div>
 
@@ -390,7 +500,7 @@ function loadCoinFlip(){
         class="playBtn"
         id="headsBtn">
 
-        Heads
+            Heads
 
         </button>
 
@@ -398,7 +508,7 @@ function loadCoinFlip(){
         class="playBtn"
         id="tailsBtn">
 
-        Tails
+            Tails
 
         </button>
 
@@ -407,25 +517,39 @@ function loadCoinFlip(){
     </div>
     `;
 
-    headsBtn.onclick =
-    ()=>playCoinFlip("heads");
+    document
+    .getElementById(
+        "headsBtn"
+    )
+    .onclick =
+    ()=>playCoinFlip(
+        "heads"
+    );
 
-    tailsBtn.onclick =
-    ()=>playCoinFlip("tails");
+    document
+    .getElementById(
+        "tailsBtn"
+    )
+    .onclick =
+    ()=>playCoinFlip(
+        "tails"
+    );
+
 }
 
 function playCoinFlip(choice){
 
-    const betAmount =
+    const bet =
     Number(
         document
-        .getElementById("bet")
-        .value
+        .getElementById(
+            "bet"
+        ).value
     );
 
     if(
-        betAmount <= 0 ||
-        betAmount > money
+        bet <= 0 ||
+        bet > money
     )
         return;
 
@@ -449,20 +573,46 @@ function playCoinFlip(choice){
         ? "heads"
         : "tails";
 
-        money -= betAmount;
+        if(result==="heads"){
 
-        if(choice === result){
-
-            money += betAmount * 2;
-
-            resultEl(
-                `You Won! (${result})`
-            );
+            coinEl.innerHTML =
+            `
+            <div class="headsCoin">
+                $
+            </div>
+            `;
 
         }else{
 
+            coinEl.innerHTML =
+            `
+            <div style="
+                font-size:90px;
+            ">
+                🪙
+            </div>
+            `;
+
+        }
+
+        money -= bet;
+
+        if(
+            choice === result
+        ){
+
+            money +=
+            bet * 2;
+
             resultEl(
-                `You Lost! (${result})`
+                "You Won!"
+            );
+
+        }
+        else{
+
+            resultEl(
+                "You Lost!"
             );
 
         }
@@ -470,11 +620,12 @@ function playCoinFlip(choice){
         updateUI();
 
     },1000);
+
 }
 
-// ======================
+// =====================================
 // DICE
-// ======================
+// =====================================
 
 function loadDice(){
 
@@ -494,7 +645,7 @@ function loadDice(){
         id="dice"
         class="diceBox">
 
-        🎲
+            🎲
 
         </div>
 
@@ -502,7 +653,7 @@ function loadDice(){
         class="playBtn"
         id="rollBtn">
 
-        Roll
+            Roll
 
         </button>
 
@@ -511,8 +662,13 @@ function loadDice(){
     </div>
     `;
 
-    rollBtn.onclick =
+    document
+    .getElementById(
+        "rollBtn"
+    )
+    .onclick =
     playDice;
+
 }
 
 function playDice(){
@@ -520,60 +676,100 @@ function playDice(){
     const bet =
     Number(
         document
-        .getElementById("bet")
-        .value
+        .getElementById(
+            "bet"
+        ).value
     );
 
-    if(bet<=0 || bet>money)
+    if(
+        bet <= 0 ||
+        bet > money
+    )
         return;
 
     const dice =
     document
-    .getElementById("dice");
+    .getElementById(
+        "dice"
+    );
 
     dice.classList.add(
         "rollAnimation"
     );
 
-    setTimeout(()=>{
+    let spins = 0;
 
-        dice.classList.remove(
-            "rollAnimation"
-        );
-
-        const roll =
-        Math.floor(
-            Math.random()*6
-        )+1;
+    const rollInterval =
+    setInterval(()=>{
 
         dice.textContent =
-        roll;
+        Math.floor(
+            Math.random()*6
+        ) + 1;
 
-        money -= bet;
+        spins++;
 
-        if(roll>=5){
+        if(spins > 12){
 
-            money += bet*3;
-
-            resultEl(
-                `WIN (${roll})`
+            clearInterval(
+                rollInterval
             );
 
-        }else{
-
-            resultEl(
-                `LOSS (${roll})`
+            finishDice(
+                bet,
+                dice
             );
+
         }
 
-        updateUI();
+    },70);
 
-    },800);
 }
 
-// ======================
+function finishDice(
+    bet,
+    dice
+){
+
+    dice.classList.remove(
+        "rollAnimation"
+    );
+
+    const roll =
+    Math.floor(
+        Math.random()*6
+    ) + 1;
+
+    dice.textContent =
+    roll;
+
+    money -= bet;
+
+    if(roll >= 5){
+
+        money +=
+        bet * 3;
+
+        resultEl(
+            `WIN (${roll})`
+        );
+
+    }
+    else{
+
+        resultEl(
+            `LOSS (${roll})`
+        );
+
+    }
+
+    updateUI();
+
+}
+
+// =====================================
 // SLOTS
-// ======================
+// =====================================
 
 function loadSlots(){
 
@@ -589,8 +785,7 @@ function loadSlots(){
         type="number"
         value="10">
 
-        <div
-        class="slotMachine">
+        <div class="slotMachine">
 
             <div class="slot" id="s1">❔</div>
             <div class="slot" id="s2">❔</div>
@@ -598,21 +793,21 @@ function loadSlots(){
 
         </div>
 
-        <button
-        class="playBtn"
-        id="spinBtn">
-
-        Spin
-
+        <button class="playBtn" id="spinBtn">
+            Spin
         </button>
 
         <p id="result"></p>
 
     </div>
+
     `;
 
-    spinBtn.onclick =
+    document
+    .getElementById("spinBtn")
+    .onclick =
     playSlots;
+
 }
 
 function playSlots(){
@@ -624,238 +819,332 @@ function playSlots(){
         .value
     );
 
-    if(bet<=0 || bet>money)
+    if(bet <= 0 || bet > money)
         return;
 
     const symbols =
-    ["🍒","🍋","⭐","💎"];
+    ["🍒","🍋","⭐","💎","7️⃣"];
 
-    [s1,s2,s3]
-    .forEach(slot=>{
+    const s1 =
+    document.getElementById("s1");
 
-        slot.classList.add(
-            "slotSpin"
-        );
+    const s2 =
+    document.getElementById("s2");
 
-    });
+    const s3 =
+    document.getElementById("s3");
 
-    setTimeout(()=>{
+    let spins = 0;
 
-        [s1,s2,s3]
-        .forEach(slot=>{
+    const interval =
+    setInterval(()=>{
 
-            slot.classList.remove(
-                "slotSpin"
-            );
+        s1.textContent =
+        symbols[Math.floor(Math.random()*symbols.length)];
 
-        });
+        s2.textContent =
+        symbols[Math.floor(Math.random()*symbols.length)];
 
-        const a =
-        symbols[
-            Math.floor(
-                Math.random()*4
-            )
-        ];
+        s3.textContent =
+        symbols[Math.floor(Math.random()*symbols.length)];
 
-        const b =
-        symbols[
-            Math.floor(
-                Math.random()*4
-            )
-        ];
+        spins++;
 
-        const c =
-        symbols[
-            Math.floor(
-                Math.random()*4
-            )
-        ];
+        if(spins > 18){
 
-        s1.textContent=a;
-        s2.textContent=b;
-        s3.textContent=c;
+            clearInterval(interval);
 
-        money -= bet;
+            finishSlots(bet);
 
-        let payout=0;
+        }
 
-        if(a===b&&b===c)
-            payout=10;
+    },80);
 
-        else if(
-            a===b||
-            b===c
-        )
-            payout=2;
-
-        money +=
-        bet*payout;
-
-        resultEl(
-            payout>0
-            ? `WIN x${payout}`
-            : "LOSS"
-        );
-
-        updateUI();
-
-    },700);
 }
 
-// ======================
-// BLACKJACK
-// ======================
+function finishSlots(bet){
+
+    const symbols =
+    ["🍒","🍋","⭐","💎","7️⃣"];
+
+    const a =
+    symbols[Math.floor(Math.random()*symbols.length)];
+
+    const b =
+    symbols[Math.floor(Math.random()*symbols.length)];
+
+    const c =
+    symbols[Math.floor(Math.random()*symbols.length)];
+
+    document.getElementById("s1").textContent = a;
+    document.getElementById("s2").textContent = b;
+    document.getElementById("s3").textContent = c;
+
+    money -= bet;
+
+    let payout = 0;
+
+    if(a === b && b === c)
+        payout = 10;
+
+    else if(a === b || b === c || a === c)
+        payout = 2;
+
+    money += bet * payout;
+
+    resultEl(
+        payout > 0
+        ? `WIN x${payout}`
+        : "LOSS"
+    );
+
+    updateUI();
+
+}
+
+// =====================================
+// BLACKJACK (FULL GAME)
+// =====================================
+
+let deck = [];
+let playerHand = [];
+let dealerHand = [];
+let standMode = false;
+
+// create deck
+function createDeck(){
+
+    const suits = ["♠","♥","♦","♣"];
+    const values = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+
+    deck = [];
+
+    for(let s of suits){
+        for(let v of values){
+            deck.push(v + s);
+        }
+    }
+
+    deck.sort(()=>Math.random() - 0.5);
+
+}
+
+function cardValue(card){
+
+    const value = card.slice(0,-1);
+
+    if(value === "A") return 11;
+    if(["J","Q","K"].includes(value)) return 10;
+
+    return Number(value);
+
+}
+
+function handTotal(hand){
+
+    let total = 0;
+    let aces = 0;
+
+    for(let c of hand){
+
+        const v = c.slice(0,-1);
+
+        if(v === "A"){
+            aces++;
+            total += 11;
+        }
+        else if(["J","Q","K"].includes(v)){
+            total += 10;
+        }
+        else{
+            total += Number(v);
+        }
+
+    }
+
+    while(total > 21 && aces > 0){
+        total -= 10;
+        aces--;
+    }
+
+    return total;
+
+}
 
 function loadBlackjack(){
 
     gameContent.innerHTML = `
 
-    <div class="gamePanel">
+    <div class="gamePanel blackjackBoard">
 
         <h1>Blackjack</h1>
 
-        <input
-        id="bet"
-        class="betInput"
-        type="number"
-        value="10">
+        <input id="bet" class="betInput" type="number" value="10">
 
-        <div
-        class="cardArea"
-        id="cards">
-
+        <div>
+            <div class="handTitle">Dealer</div>
+            <div id="dealerCards" class="cardArea"></div>
         </div>
 
-        <button
-        class="playBtn"
-        id="dealBtn">
+        <div>
+            <div class="handTitle">You</div>
+            <div id="playerCards" class="cardArea"></div>
+        </div>
 
-        Deal
+        <div>
 
-        </button>
+            <button class="playBtn" id="dealBtn">Deal</button>
+            <button class="playBtn" id="hitBtn">Hit</button>
+            <button class="playBtn" id="standBtn">Stand</button>
+
+        </div>
 
         <p id="result"></p>
 
     </div>
+
     `;
 
-    dealBtn.onclick =
-    playBlackjack;
+    document.getElementById("dealBtn").onclick = startBlackjack;
+    document.getElementById("hitBtn").onclick = hit;
+    document.getElementById("standBtn").onclick = stand;
+
 }
 
-function playBlackjack(){
+function startBlackjack(){
 
     const bet =
-    Number(
-        document
-        .getElementById("bet")
-        .value
-    );
+    Number(document.getElementById("bet").value);
 
-    if(bet<=0 || bet>money)
+    if(bet <= 0 || bet > money)
         return;
 
-    const cards =
-    document.getElementById(
-        "cards"
-    );
-
-    cards.innerHTML="";
-
-    const cardValues =
-    ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
-
-    const p1 =
-    cardValues[
-        Math.floor(
-            Math.random()*13
-        )
-    ];
-
-    const p2 =
-    cardValues[
-        Math.floor(
-            Math.random()*13
-        )
-    ];
-
-    const d1 =
-    cardValues[
-        Math.floor(
-            Math.random()*13
-        )
-    ];
-
-    const d2 =
-    cardValues[
-        Math.floor(
-            Math.random()*13
-        )
-    ];
-
-    [p1,p2,d1,d2]
-    .forEach(card=>{
-
-        const div =
-        document.createElement(
-            "div"
-        );
-
-        div.className =
-        "card";
-
-        div.textContent =
-        card;
-
-        cards.appendChild(div);
-
-    });
-
-    const player =
-    Math.floor(
-        Math.random()*11
-    )+11;
-
-    const dealer =
-    Math.floor(
-        Math.random()*11
-    )+11;
+    blackjackBet = bet;
 
     money -= bet;
 
-    if(
-        player>dealer ||
-        dealer>21
-    ){
+    createDeck();
 
-        money += bet*2;
+    playerHand = [deck.pop(), deck.pop()];
+    dealerHand = [deck.pop(), deck.pop()];
 
-        resultEl(
-            `WIN (${player} vs ${dealer})`
-        );
+    standMode = false;
 
-    }else{
+    renderBlackjack(true);
 
-        resultEl(
-            `LOSS (${player} vs ${dealer})`
-        );
+}
+
+function renderBlackjack(hideDealerCard = true){
+
+    const dealerDiv =
+    document.getElementById("dealerCards");
+
+    const playerDiv =
+    document.getElementById("playerCards");
+
+    dealerDiv.innerHTML = "";
+    playerDiv.innerHTML = "";
+
+    dealerHand.forEach((card, i)=>{
+
+        const div = document.createElement("div");
+        div.className = "card";
+
+        if(i === 1 && hideDealerCard && !standMode){
+            div.textContent = "❓";
+            div.classList.add("hiddenCard");
+        } else {
+            div.textContent = card;
+        }
+
+        dealerDiv.appendChild(div);
+
+    });
+
+    playerHand.forEach(card=>{
+
+        const div = document.createElement("div");
+        div.className = "card";
+        div.textContent = card;
+
+        playerDiv.appendChild(div);
+
+    });
+
+    checkGame();
+
+}
+
+function hit(){
+
+    if(!playerHand.length) return;
+
+    playerHand.push(deck.pop());
+
+    renderBlackjack(true);
+
+}
+
+function stand(){
+
+    standMode = true;
+
+    while(handTotal(dealerHand) < 17){
+        dealerHand.push(deck.pop());
+    }
+
+    renderBlackjack(false);
+
+    resolveBlackjack();
+
+}
+
+function checkGame(){
+
+    const player = handTotal(playerHand);
+
+    if(player > 21){
+        resultEl("BUST - You Lose");
+        updateUI();
+    }
+
+}
+
+function resolveBlackjack(){
+
+    const player = handTotal(playerHand);
+    const dealer = handTotal(dealerHand);
+
+    if(player > 21){
+
+        resultEl("BUST - Dealer Wins");
+
+    }
+    else if(dealer > 21 || player > dealer){
+
+        money += blackjackBet * 2;
+        resultEl(`YOU WIN (${player} vs ${dealer})`);
+
+    }
+    else if(player === dealer){
+
+        money += blackjackBet;
+        resultEl("PUSH");
+
+    }
+    else{
+
+        resultEl(`YOU LOSE (${player} vs ${dealer})`);
+
     }
 
     updateUI();
+
 }
 
-// ======================
-// HELPER
-// ======================
-
-function resultEl(text){
-
-    document
-    .getElementById("result")
-    .textContent = text;
-}
-
-// ======================
+// =====================================
+// START GAME
+// =====================================
 
 loadGame();
 updateUI();
