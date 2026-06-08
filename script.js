@@ -1178,9 +1178,13 @@ loginBtn.onclick = async () => {
 
 onAuthStateChanged(auth, async (user) => {
 
+    console.log("AUTH STATE:", user);
+
     if(!user) return;
 
     uid = user.uid;
+    
+    console.log("UID:", uid);
 
     authBox.style.display = "none";
 
