@@ -270,6 +270,7 @@ async function saveToCloud(){
 
      console.log("Saving...");
     console.log({
+        username: document.getElementById("username").value,
         money,
         clickPower,
         upgradeCost
@@ -280,7 +281,7 @@ async function saveToCloud(){
     await setDoc(doc(db, "players", uid), {
 
         money,
-        username,
+        username: document.getElementById("username").value,
         clickPower,
         upgradeCost
 
@@ -398,7 +399,7 @@ document
             );
 
             if(button.dataset.tab === "leaderboards"){
-                
+
                 loadLeaderboard();
 
             }
