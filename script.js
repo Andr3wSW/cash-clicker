@@ -539,13 +539,13 @@ function loadCoinFlip(){
     const result = document.getElementById("result");
 
     function setHeads(){
-        coin.className = "flipCoin";
-        coin.innerHTML = "$";
+        coin.className = "headsCoin";
+        coin.innerHTML = "😀";
     }
 
     function setTails(){
         coin.className = "tailsCoin";
-        coin.innerHTML = "T";
+        coin.innerHTML = "🏠";
     }
 
     setHeads();
