@@ -540,12 +540,12 @@ function loadCoinFlip(){
 
     function setHeads(){
         coin.className = "headsCoin";
-        coin.innerHTML = "H";
+        coin.innerHTML = " ";
     }
 
     function setTails(){
         coin.className = "tailsCoin";
-        coin.innerHTML = "T";
+        coin.innerHTML = " ";
     }
 
     setHeads();
