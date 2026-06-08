@@ -18,7 +18,12 @@ import {
   getFirestore,
   doc,
   setDoc,
-  getDoc
+  getDoc,
+  collection,
+  query,
+  orderBy,
+  limit,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -275,6 +280,7 @@ async function saveToCloud(){
     await setDoc(doc(db, "players", uid), {
 
         money,
+        username,
         clickPower,
         upgradeCost
 
@@ -390,6 +396,12 @@ document
             .classList.add(
                 "active"
             );
+
+            if(button.dataset.tab === "leaderboards"){
+                
+                loadLeaderboard();
+
+            }
 
         }
     );
@@ -1232,4 +1244,63 @@ function showBetError(msg){
         el.textContent = "";
     },2000);
 
+}
+
+// =====================================
+// LEADERBOARD
+// =====================================
+
+async function loadLeaderboard(){
+
+    const leaderboard =
+    document.getElementById(
+        "leaderboardList"
+    );
+
+    leaderboard.innerHTML =
+    "Loading...";
+
+    const q = query(
+        collection(db,"players"),
+        orderBy("money","desc"),
+        limit(50)
+    );
+
+    const snapshot =
+    await getDocs(q);
+
+    let html = "";
+
+    let rank = 1;
+
+    snapshot.forEach(doc=>{
+
+        const data =
+        doc.data();
+
+        html += `
+
+        <div class="leaderboardEntry">
+
+            <span>
+                #${rank}
+            </span>
+
+            <span>
+                ${data.username || "Unknown"}
+            </span>
+
+            <span>
+                $${Math.floor(data.money || 0)}
+            </span>
+
+        </div>
+
+        `;
+
+        rank++;
+
+    });
+
+    leaderboard.innerHTML = html;
 }

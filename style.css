@@ -671,3 +671,27 @@ body{
     font-weight:bold;
     margin-top:10px;
 }
+
+#leaderboardList{
+
+    max-width:800px;
+    margin:auto;
+
+}
+
+.leaderboardEntry{
+
+    background:white;
+
+    margin:10px 0;
+    padding:15px;
+
+    border-radius:12px;
+
+    display:flex;
+    justify-content:space-between;
+
+    box-shadow:
+    0 2px 10px rgba(0,0,0,.08);
+
+}
