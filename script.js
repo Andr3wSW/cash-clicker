@@ -263,6 +263,13 @@ upgradeBtn.addEventListener(
 
 async function saveToCloud(){
 
+     console.log("Saving...");
+    console.log({
+        money,
+        clickPower,
+        upgradeCost
+    });
+
     if(!uid) return;
 
     await setDoc(doc(db, "players", uid), {
@@ -351,6 +358,8 @@ setInterval(
     spawnDollar,
     400
 );
+
+setInterval(saveToCloud,5000);
 
 // =====================================
 // TABS
