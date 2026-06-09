@@ -433,53 +433,84 @@ body{
 }
 
 .tailsCoin {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    position: relative; 
-    overflow: hidden;
+    width:130px;
+    height:130px;
+    border-radius:50%;
+    overflow:hidden;
 
-    background-color: #ffb300;
-    
-    background-image: 
-        linear-gradient(115deg, transparent 50%, #7a5200 50%),
-        linear-gradient(245deg, transparent 50%, #7a5200 50%),
-        linear-gradient(#7a5200, #7a5200),
-        linear-gradient(#7a5200, #7a5200),
-        linear-gradient(#7a5200, #7a5200),
-        linear-gradient(#7a5200, #7a5200),
-        linear-gradient(#7a5200, #7a5200),
-        linear-gradient(#7a5200, #7a5200),
-        linear-gradient(#7a5200, #7a5200),
-        linear-gradient(135deg, #ffd54f, #ffb300);
+    background-color:#ffb300;
 
-    background-size: 
-        30px 20px,  
-        30px 20px,   
-        60px 6px,    
-        6px 30px,    
-        6px 30px,
-        6px 30px,    
-        6px 30px,    
-        64px 6px,    
-        72px 8px,    
-        100% 100%;   
+    background-image:
 
-    background-position: 
-        35px 32px,   
-        65px 32px,   
-        35px 52px,   
-        38px 58px,   
-        46px 58px,   
-        78px 58px,   
-        86px 58px,   
-        33px 88px,   
-        29px 94px,   
-        0 0;         
+        linear-gradient(115deg,
+            transparent 50%,
+            #7a5200 50%),
 
-    background-repeat: no-repeat;
+        linear-gradient(245deg,
+            transparent 50%,
+            #7a5200 50%),
 
-    box-shadow: inset 0 0 0 10px #e6a800;
+        linear-gradient(#7a5200,#7a5200),
+
+        /* Columns */
+        linear-gradient(#7a5200,#7a5200),
+        linear-gradient(#7a5200,#7a5200),
+        linear-gradient(#7a5200,#7a5200),
+        linear-gradient(#7a5200,#7a5200),
+        linear-gradient(#7a5200,#7a5200),
+        linear-gradient(#7a5200,#7a5200),
+
+        linear-gradient(#7a5200,#7a5200),
+        linear-gradient(#7a5200,#7a5200),
+
+        linear-gradient(
+            135deg,
+            #ffd54f,
+            #ffb300
+        );
+
+    background-size:
+
+        35px 12px,
+        35px 12px,
+
+        70px 5px,
+
+        4px 28px,
+        4px 28px,
+        4px 28px,
+        4px 28px,
+        4px 28px,
+        4px 28px,
+
+        76px 5px,
+        82px 7px,
+
+        100% 100%;
+
+    background-position:
+
+        30px 35px,
+        65px 35px,
+
+        30px 47px,
+
+        34px 52px,
+        44px 52px,
+        54px 52px,
+        74px 52px,
+        84px 52px,
+        94px 52px,
+
+        27px 80px,
+        24px 86px,
+
+        0 0;
+
+    background-repeat:no-repeat;
+
+    box-shadow:
+        inset 0 0 0 10px #e6a800;
 }
 
 
