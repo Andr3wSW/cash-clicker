@@ -301,6 +301,8 @@ async function loadCloudSave(){
     money = data.money ?? 0;
     clickPower = data.clickPower ?? 1;
     upgradeCost = data.upgradeCost ?? 10;
+    
+    updateAccountPage(data);
 
     document.getElementById("userDisplay").textContent =
         data.username || "Player";
@@ -1315,3 +1317,27 @@ document
     location.reload();
 
 };
+
+function checkAchievements(){
+
+    if(money >= 100)
+        achievements.money100 = true;
+
+    if(money >= 1000)
+        achievements.money1000 = true;
+
+}
+
+function updateAccountPage(data){
+
+    document.getElementById(
+        "accountUsername"
+    ).textContent =
+    data.username;
+
+    document.getElementById(
+        "accountEmail"
+    ).textContent =
+    auth.currentUser.email;
+
+updateAccountPage(data);}
