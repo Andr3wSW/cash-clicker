@@ -1305,3 +1305,13 @@ async function loadLeaderboard(){
 
     leaderboard.innerHTML = html;
 }
+
+document
+.getElementById("signOutBtn")
+.onclick = async ()=>{
+
+    await signOut(auth);
+
+    location.reload();
+
+};
