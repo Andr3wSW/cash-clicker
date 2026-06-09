@@ -150,7 +150,8 @@ function updateCoinVisual(){
     )`;
 
     coinTier.textContent =
-    `${data.name} Tier ${tier}`;
+    `${data.name} Tier ${tier}
+    x${multiplier}`
 }
 
 function updateUI(){
@@ -239,6 +240,13 @@ upgradeBtn.addEventListener(
         ) return;
 
         money -= upgradeCost;
+
+        if(clickPower >= 25){
+
+            prestige();
+
+            return;
+        }
 
         clickPower++;
 
@@ -1340,4 +1348,23 @@ function updateAccountPage(data){
     ).textContent =
     auth.currentUser.email;
 
+    document.getElementById(
+        "prestigeDisplay"
+    )
+    .textContent =
+    `Prestige ${prestigeLevel}`
+
 updateAccountPage(data);}
+
+function prestige(){
+
+    prestigeLevel++;
+
+    clickpower = 1;
+
+    updateUI();
+
+    showAchievmentPopup(
+        `⭐ Prestige ${prestigeLevel}`
+    );
+}
