@@ -395,89 +395,89 @@ body{
     0 10px 25px rgba(0,0,0,.2);
 }
 
-.headsCoin{
+.headsCoin {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
 
-    width:130px;
-    height:130px;
+    background-color: #ffb300;
 
-    border-radius:50%;
+    background-image:
+        linear-gradient(#7a5200, #7a5200),
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+        radial-gradient(circle at center, #7a5200 55%, transparent 56%),
 
-    font-size:60px;
-    font-weight:bold;
+        radial-gradient(circle at center, #7a5200 55%, transparent 56%),
 
-    color:#7a5200;
+        linear-gradient(135deg, #ffd54f, #ffb300);
 
-    background:
-    linear-gradient(
-        135deg,
-        #ffd54f,
-        #ffb300
-    );
+    background-size:
+        8px 70px,
+        38px 28px,
+        38px 28px,
+        100% 100%;
+
+    background-position:
+        center center,
+        center 36px,
+        center 66px,
+        0 0;
+
+    background-repeat: no-repeat;
 
     box-shadow:
-    inset 0 0 0 10px #e6a800;
+        inset 0 0 0 10px #e6a800;
 }
 
 .tailsCoin {
     width: 130px;
     height: 130px;
     border-radius: 50%;
-    position: relative; /* Allows precise layered positioning */
+    position: relative; 
     overflow: hidden;
 
-    /* Base Gold Gradient */
     background-color: #ffb300;
     
-    /* Pure CSS Building Graphic */
     background-image: 
-        /* 1. Triangular Roof (Pediment) */
         linear-gradient(115deg, transparent 50%, #7a5200 50%),
         linear-gradient(245deg, transparent 50%, #7a5200 50%),
-        /* 2. Roof Base Beam (Architrave) */
-        linear-gradient(#7a5200, #7a5200),
-        /* 3. Four Columns */
         linear-gradient(#7a5200, #7a5200),
         linear-gradient(#7a5200, #7a5200),
         linear-gradient(#7a5200, #7a5200),
         linear-gradient(#7a5200, #7a5200),
-        /* 4. Building Foundation Steps */
         linear-gradient(#7a5200, #7a5200),
         linear-gradient(#7a5200, #7a5200),
-        /* 5. Main Metallic Background Gradient */
+        linear-gradient(#7a5200, #7a5200),
         linear-gradient(135deg, #ffd54f, #ffb300);
 
-    /* Positioning and Sizing each element of the building */
     background-size: 
-        30px 20px,   /* Left half of triangle roof */
-        30px 20px,   /* Right half of triangle roof */
-        60px 6px,    /* Roof beam */
-        6px 30px,    /* Column 1 */
-        6px 30px,    /* Column 2 */
-        6px 30px,    /* Column 3 */
-        6px 30px,    /* Column 4 */
-        64px 6px,    /* Top step */
-        72px 8px,    /* Bottom step */
-        100% 100%;   /* Background gold */
+        30px 20px,  
+        30px 20px,   
+        60px 6px,    
+        6px 30px,    
+        6px 30px,
+        6px 30px,    
+        6px 30px,    
+        64px 6px,    
+        72px 8px,    
+        100% 100%;   
 
     background-position: 
-        35px 32px,   /* Left roof */
-        65px 32px,   /* Right roof */
-        35px 52px,   /* Roof beam */
-        38px 58px,   /* Column 1 */
-        46px 58px,   /* Column 2 */
-        78px 58px,   /* Column 3 */
-        86px 58px,   /* Column 4 */
-        33px 88px,   /* Top step */
-        29px 94px,   /* Bottom step */
-        0 0;         /* Background */
+        35px 32px,   
+        65px 32px,   
+        35px 52px,   
+        38px 58px,   
+        46px 58px,   
+        78px 58px,   
+        86px 58px,   
+        33px 88px,   
+        29px 94px,   
+        0 0;         
 
     background-repeat: no-repeat;
 
-    /* Matching inner gold rim */
     box-shadow: inset 0 0 0 10px #e6a800;
 }
 
