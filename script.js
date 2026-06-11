@@ -191,6 +191,17 @@ function updateUI(){
     upgradeBtn.textContent =
     `Upgrade Coin ($${upgradeCost})`;
 
+    if(clickPower >= 25){
+        upgradeBtn.textContent =
+            "⭐ PRESTIGE";
+
+        }else{
+
+    upgradeBtn.textContent =
+    `Upgrade Coin ($${upgradeCost})`;
+
+}
+
     updateCoinVisual();
     checkAchievements();
     updateAchievementList();
@@ -1459,7 +1470,7 @@ function prestige(){
 
     prestigeLevel++;
 
-    clickpower = 1;
+    clickPower = 1;
 
     updateUI();
 
