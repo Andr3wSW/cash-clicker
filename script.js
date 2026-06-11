@@ -251,20 +251,21 @@ function createFloatingMoney(amount){
 // CLICKING
 // =====================================
 
-coin.addEventListener(
-    "click",
-    ()=>{
+coin.addEventListener("click",()=>{
 
-        money += clickPower;
+    const clickAmount =
+    clickPower *
+    (2 ** prestigeLevel);
 
-        createFloatingMoney(
-            clickPower
-        );
+    money += clickAmount;
 
-        updateUI();
+    createFloatingMoney(
+        clickAmount
+    );
 
-    }
-);
+    updateUI();
+
+});
 
 upgradeBtn.addEventListener(
     "click",
@@ -1463,8 +1464,7 @@ function updateAccountPage(data){
     )
     .textContent =
     `Prestige ${prestigeLevel}`
-
-updateAccountPage(data);}
+}
 
 function prestige(){
 
