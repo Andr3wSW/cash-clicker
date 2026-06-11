@@ -67,7 +67,7 @@ let achievements = {
     prestige5:false,
     prestige10:false
 
-};-
+};
 
 // =====================================
 // BLACKJACK DATA
