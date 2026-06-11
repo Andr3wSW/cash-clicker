@@ -45,6 +45,10 @@
             🏬 Shop
         </button> 
 
+        <button class="tabBtn" data-tab="chat">
+            💬 Global Chat
+        </button>
+
         <button class="tabBtn" data-tab="account">
             👤 Account
         </button>
@@ -137,6 +141,30 @@
                     Sign Out
                 </button>
         </div>
+
+        <!-- CHAT -->
+
+        <div class="tab" id="chat">
+
+            <h1>💬 Global Chat</h1>
+
+            <div id="chatMessages"></div>
+
+            <div id="chatInputArea">
+
+                <input
+                id="chatInput"
+                maxlength="200"
+                placeholder="Type a message...">
+
+                <button id="sendChatBtn">
+                    Send
+                </button>
+
+            </div>
+
+        </div>
+        
         <!-- CASINO -->
 
         <div class="tab" id="casino">

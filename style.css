@@ -869,3 +869,80 @@ body{
     }
 
 }
+
+#chatMessages{
+
+    height:500px;
+
+    overflow-y:auto;
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:15px;
+
+    box-shadow:
+    0 3px 15px rgba(0,0,0,.1);
+
+    text-align:left;
+}
+
+.chatMessage{
+
+    padding:8px;
+
+    border-bottom:
+    1px solid #eee;
+
+    word-wrap:break-word;
+}
+
+.chatUsername{
+
+    color:#2e7d32;
+
+    font-weight:bold;
+}
+
+#chatInputArea{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-top:15px;
+}
+
+#chatInput{
+
+    flex:1;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    border:1px solid #ccc;
+
+    font-size:16px;
+}
+
+#sendChatBtn{
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#4caf50;
+
+    color:white;
+
+    cursor:pointer;
+}
+
+#sendChatBtn:hover{
+
+    background:#43a047;
+}

@@ -23,7 +23,13 @@ import {
   query,
   orderBy,
   limit,
-  getDocs
+  getDocs,
+  addDoc,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -1573,3 +1579,152 @@ function updateAchievementList(){
         list.appendChild(div);
     }
 }
+
+const chatQuery = query(
+
+    collection(db,"chat"),
+
+    orderBy(
+        "timestamp",
+        "asc"
+    ),
+
+    limit(100)
+
+);
+
+onSnapshot(
+
+    chatQuery,
+
+    (snapshot)=>{
+
+        const chatBox =
+        document.getElementById(
+            "chatMessages"
+        );
+
+        if(!chatBox)
+            return;
+
+        chatBox.innerHTML = "";
+
+        snapshot.forEach(doc=>{
+
+            const data =
+            doc.data();
+
+            chatBox.innerHTML +=
+
+            `<div class="chatMessage">
+
+                <span class="chatUsername">
+
+                ${data.username}
+
+                </span>
+
+                : ${data.message}
+
+            </div>`;
+
+        });
+
+        chatBox.scrollTop =
+        chatBox.scrollHeight;
+
+    }
+
+);
+
+async function sendChatMessage(){
+
+    const input =
+    document.getElementById(
+        "chatInput"
+    );
+
+    if(!input)
+        return;
+
+    const message =
+    input.value.trim();
+
+    if(message === "")
+        return;
+
+    await addDoc(
+
+        collection(
+            db,
+            "chat"
+        ),
+
+        {
+
+            username:
+
+            document
+            .getElementById(
+                "usernameDisplay"
+            )
+            .textContent,
+
+            message:
+
+            message,
+
+            timestamp:
+            serverTimestamp()
+
+        }
+
+    );
+
+    input.value = "";
+}
+
+document.addEventListener(
+
+    "click",
+
+    (e)=>{
+
+        if(
+            e.target &&
+            e.target.id ===
+            "sendChatBtn"
+        ){
+
+            sendChatMessage();
+
+        }
+
+    }
+
+);
+
+document.addEventListener(
+
+    "keydown",
+
+    (e)=>{
+
+        if(
+
+            e.key === "Enter"
+
+            &&
+
+            document.activeElement
+            .id === "chatInput"
+
+        ){
+
+            sendChatMessage();
+
+        }
+
+    }
+
+);
