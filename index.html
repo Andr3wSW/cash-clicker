@@ -11,15 +11,24 @@
 
 <div id="authBox">
 
-    <h2>Login</h2>
-    <input id="username" placeholder="Username">
-    <input id="email" placeholder="Email">
-    <input id="password" placeholder="Password" type="password">
+    <div class="authCard">
 
-    <button id="loginBtn">Login</button>
-    <button id="registerBtn">Register</button>
+        <img class="authLogo" src="assets/logo.png" alt="Cash Clicker logo">
 
-    <p id="authStatus"></p>
+        <h1 class="authTitle">Cash Clicker</h1>
+
+        <p class="authSubtitle">Log in or create an account to play</p>
+
+        <input id="username" placeholder="Username (new accounts only)">
+        <input id="email" placeholder="Email">
+        <input id="password" placeholder="Password" type="password">
+
+        <button id="loginBtn">Login</button>
+        <button id="registerBtn">Register</button>
+
+        <p id="authStatus"></p>
+
+    </div>
 
 </div>
 
@@ -43,7 +52,7 @@
 
         <button class="tabBtn" data-tab="shop">
             🏬 Shop
-        </button> 
+        </button>
 
         <button class="tabBtn" data-tab="chat">
             💬 Global Chat
@@ -137,6 +146,13 @@
 
                 <h2>⚙️ Settings</h2>
 
+                <div class="settingsRow">
+                    <input id="usernameChange" placeholder="New username" maxlength="16">
+                    <button id="usernameChangeBtn">Change Username</button>
+                </div>
+
+                <p id="usernameChangeStatus"></p>
+
                 <button id="signOutBtn">
                     Sign Out
                 </button>
@@ -164,7 +180,7 @@
             </div>
 
         </div>
-        
+
         <!-- CASINO -->
 
         <div class="tab" id="casino">

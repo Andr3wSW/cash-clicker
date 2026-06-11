@@ -15,7 +15,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 import {
-  getFirestore,
+  initializeFirestore,
   doc,
   setDoc,
   getDoc,
@@ -23,6 +23,7 @@ import {
   query,
   orderBy,
   limit,
+  limitToLast,
   getDocs,
   addDoc,
   onSnapshot,
@@ -41,9 +42,14 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const db = initializeFirestore(app, {
+    experimentalAutoDetectLongPolling: true
+});
 
 let uid = null;
+let username = "";
+let saveDirty = false;
+let loaded = false;
 
 // =====================================
 // BASE DATA
@@ -53,7 +59,6 @@ let money = 0;
 let clickPower = 1;
 let upgradeCost = 10;
 let prestigeLevel = 0;
-let username = "Player";
 let achievements = {
 
     money100:false,
@@ -192,23 +197,23 @@ function updateUI(){
     sidebarMoney.textContent =
     displayMoney;
 
-    upgradeBtn.textContent =
-    `Upgrade Coin ($${upgradeCost})`;
-
     if(clickPower >= 25){
+
         upgradeBtn.textContent =
-            "⭐ PRESTIGE";
+        "⭐ PRESTIGE";
 
-        }else{
+    }else{
 
-    upgradeBtn.textContent =
-    `Upgrade Coin ($${upgradeCost})`;
+        upgradeBtn.textContent =
+        `Upgrade Coin ($${upgradeCost})`;
 
-}
+    }
 
     updateCoinVisual();
     checkAchievements();
     updateAchievementList();
+
+    saveDirty = true;
 }
 
 // =====================================
@@ -255,31 +260,27 @@ function createFloatingMoney(amount){
 // CLICKING
 // =====================================
 
-coin.addEventListener("click",()=>{
+coin.addEventListener(
+    "click",
+    ()=>{
 
-    const clickAmount =
-    clickPower *
-    (2 ** prestigeLevel);
+        const amount =
+        clickPower * (2 ** prestigeLevel);
 
-    money += clickAmount;
+        money += amount;
 
-    createFloatingMoney(
-        clickAmount
-    );
+        createFloatingMoney(
+            amount
+        );
 
-    updateUI();
+        updateUI();
 
-});
+    }
+);
 
 upgradeBtn.addEventListener(
     "click",
     ()=>{
-
-        if(
-            money < upgradeCost
-        ) return;
-
-        money -= upgradeCost;
 
         if(clickPower >= 25){
 
@@ -287,6 +288,12 @@ upgradeBtn.addEventListener(
 
             return;
         }
+
+        if(
+            money < upgradeCost
+        ) return;
+
+        money -= upgradeCost;
 
         clickPower++;
 
@@ -316,28 +323,27 @@ upgradeBtn.addEventListener(
 
 async function saveToCloud(){
 
-     console.log("Saving...");
-    console.log({
-        username: document.getElementById("username").value,
-        money,
-        clickPower,
-        upgradeCost,
-        prestigeLevel,
-        achievements
-    });
+    if(!uid || !loaded) return;
 
-    if(!uid) return;
+    saveDirty = false;
 
-    await setDoc(doc(db, "players", uid), {
+    try{
 
-        money,
-        username: document.getElementById("username").value,
-        clickPower,
-        upgradeCost,
-        prestigeLevel,
-        achievements
+        await setDoc(doc(db, "players", uid), {
 
-    });
+            money: blackjackActive ? money + blackjackBet : money,
+            username,
+            clickPower,
+            upgradeCost,
+            prestigeLevel,
+            achievements
+
+        });
+
+    }catch(e){
+        saveDirty = true;
+        console.error("Save failed", e);
+    }
 
 }
 
@@ -346,26 +352,42 @@ async function loadCloudSave(){
     const ref = doc(db, "players", uid);
     const snap = await getDoc(ref);
 
-    if(!snap.exists()) return;
+    if(snap.exists()){
 
-    const data = snap.data();
+        const data = snap.data();
 
-    money = data.money ?? 0;
-    clickPower = data.clickPower ?? 1;
-    upgradeCost = data.upgradeCost ?? 10;
-    prestigeLevel = data.prestigeLevel ?? 0;
-    
-    updateAccountPage(data);
+        money = Math.max(0, Number(data.money) || 0);
+        clickPower = Math.min(Math.max(Math.floor(Number(data.clickPower) || 1), 1), 25);
+        upgradeCost = Math.max(10, Number(data.upgradeCost) || 10);
+        prestigeLevel = Math.max(0, Math.floor(Number(data.prestigeLevel) || 0));
 
-    document.getElementById("userDisplay").textContent =
-        data.username || "Player";
-
-        if(data.achievements){
-            achievements =
-            data.achievements;
+        if(typeof data.username === "string" && data.username.trim()){
+            username = data.username.trim();
         }
 
+        if(data.achievements){
+            achievements = {
+                ...achievements,
+                ...data.achievements
+            };
+        }
+
+    }
+
+    if(!username) username = "Player";
+
+    loaded = true;
+
+    if(!snap.exists()) await saveToCloud();
+
+    updateAccountPage();
+
+    document.getElementById("userDisplay").textContent =
+        username;
+
     updateUI();
+
+    saveDirty = false;
 
 }
 
@@ -426,7 +448,23 @@ setInterval(
     400
 );
 
-setInterval(saveToCloud,5000);
+setInterval(()=>{
+
+    if(saveDirty) saveToCloud();
+
+},15000);
+
+document.addEventListener(
+    "visibilitychange",
+    ()=>{
+
+        if(
+            document.visibilityState === "hidden" &&
+            saveDirty
+        ) saveToCloud();
+
+    }
+);
 
 // =====================================
 // TABS
@@ -530,6 +568,8 @@ document
 
 function openGame(game){
 
+    settleBlackjack();
+
     casinoMenu.style.display =
     "none";
 
@@ -620,19 +660,20 @@ function loadCoinFlip(){
 function playCoinFlip(choice, coin, resultEl, setHeads, setTails){
 
     const betInput = document.getElementById("bet");
-    const betAmount = Number(betInput.value);
+    const betAmount = Math.floor(Number(betInput.value));
 
-    // BET VALIDATION
-    if(betAmount <= 0 || betAmount > money){
-        showBetError("Can't bet more than you have");
+    if(!Number.isFinite(betAmount) || betAmount <= 0 || betAmount > money){
+        showBetError("Enter a valid bet you can afford");
         return;
     }
 
-    // lock buttons during animation
+    money -= betAmount;
+
+    updateUI();
+
     document.getElementById("headsBtn").disabled = true;
     document.getElementById("tailsBtn").disabled = true;
 
-    // flip animation
     coin.classList.add("flipAnimation");
 
     setTimeout(() => {
@@ -641,11 +682,8 @@ function playCoinFlip(choice, coin, resultEl, setHeads, setTails){
 
         const result = Math.random() < 0.5 ? "heads" : "tails";
 
-        // update visual coin
         if(result === "heads") setHeads();
         else setTails();
-
-        money -= betAmount;
 
         if(choice === result){
 
@@ -662,9 +700,11 @@ function playCoinFlip(choice, coin, resultEl, setHeads, setTails){
 
         updateUI();
 
-        // unlock buttons
-        document.getElementById("headsBtn").disabled = false;
-        document.getElementById("tailsBtn").disabled = false;
+        const headsBtn = document.getElementById("headsBtn");
+        const tailsBtn = document.getElementById("tailsBtn");
+
+        if(headsBtn) headsBtn.disabled = false;
+        if(tailsBtn) tailsBtn.disabled = false;
 
     }, 900);
 }
@@ -717,20 +757,30 @@ function loadDice(){
 
 }
 
+let diceRolling = false;
+
 function playDice(){
 
+    if(diceRolling) return;
+
     const bet =
-    Number(
+    Math.floor(Number(
         document
         .getElementById(
             "bet"
         ).value
-    );
+    ));
 
-    if(bet <= 0 || bet > money){
-        showBetError("Can't bet more than you have");
+    if(!Number.isFinite(bet) || bet <= 0 || bet > money){
+        showBetError("Enter a valid bet you can afford");
         return;
     }
+
+    diceRolling = true;
+
+    money -= bet;
+
+    updateUI();
 
     const dice =
     document
@@ -788,7 +838,7 @@ function finishDice(
     dice.textContent =
     roll;
 
-    money -= bet;
+    diceRolling = false;
 
     if(roll >= 5){
 
@@ -857,19 +907,29 @@ function loadSlots(){
 
 }
 
+let slotsSpinning = false;
+
 function playSlots(){
 
+    if(slotsSpinning) return;
+
     const bet =
-    Number(
+    Math.floor(Number(
         document
         .getElementById("bet")
         .value
-    );
+    ));
 
-    if(bet <= 0 || bet > money){
-        showBetError("Can't bet more than you have");
+    if(!Number.isFinite(bet) || bet <= 0 || bet > money){
+        showBetError("Enter a valid bet you can afford");
         return;
     }
+
+    slotsSpinning = true;
+
+    money -= bet;
+
+    updateUI();
 
     const symbols =
     ["🍒","🍋","⭐","💎","7️⃣"];
@@ -929,7 +989,7 @@ function finishSlots(bet){
     document.getElementById("s2").textContent = b;
     document.getElementById("s3").textContent = c;
 
-    money -= bet;
+    slotsSpinning = false;
 
     let payout = 0;
 
@@ -937,13 +997,15 @@ function finishSlots(bet){
         payout = 10;
 
     else if(a === b || b === c || a === c)
-        payout = 2;
+        payout = 1;
 
     money += bet * payout;
 
     resultEl(
-        payout > 0
+        payout > 1
         ? `WIN x${payout}`
+        : payout === 1
+        ? "PAIR - Bet Returned"
         : "LOSS"
     );
 
@@ -972,7 +1034,10 @@ function createDeck(){
         }
     }
 
-    deck.sort(()=>Math.random() - 0.5);
+    for(let i = deck.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
 
 }
 
@@ -1060,11 +1125,13 @@ function loadBlackjack(){
 
 function startBlackjack(){
 
-    const bet =
-    Number(document.getElementById("bet").value);
+    if(blackjackActive) return;
 
-    if(bet <= 0 || bet > money){
-        showBetError("Can't bet more than you have");
+    const bet =
+    Math.floor(Number(document.getElementById("bet").value));
+
+    if(!Number.isFinite(bet) || bet <= 0 || bet > money){
+        showBetError("Enter a valid bet you can afford");
         return;
     }
 
@@ -1078,6 +1145,11 @@ function startBlackjack(){
     dealerHand = [deck.pop(), deck.pop()];
 
     standMode = false;
+    blackjackActive = true;
+
+    resultEl("");
+
+    updateUI();
 
     renderBlackjack(true);
 
@@ -1120,15 +1192,29 @@ function renderBlackjack(hideDealerCard = true){
 
     });
 
-    checkGame();
-
 }
 
 function hit(){
 
-    if(!playerHand.length) return;
+    if(!blackjackActive) return;
 
     playerHand.push(deck.pop());
+
+    const total = handTotal(playerHand);
+
+    if(total > 21){
+
+        blackjackActive = false;
+        standMode = true;
+
+        renderBlackjack(false);
+
+        resultEl(`BUST - You Lose (${total})`);
+
+        updateUI();
+
+        return;
+    }
 
     renderBlackjack(true);
 
@@ -1136,6 +1222,9 @@ function hit(){
 
 function stand(){
 
+    if(!blackjackActive) return;
+
+    blackjackActive = false;
     standMode = true;
 
     while(handTotal(dealerHand) < 17){
@@ -1148,14 +1237,18 @@ function stand(){
 
 }
 
-function checkGame(){
+function settleBlackjack(){
 
-    const player = handTotal(playerHand);
+    if(!blackjackActive) return;
 
-    if(player > 21){
-        resultEl("BUST - You Lose");
-        updateUI();
+    blackjackActive = false;
+    standMode = true;
+
+    while(handTotal(dealerHand) < 17){
+        dealerHand.push(deck.pop());
     }
+
+    resolveBlackjack();
 
 }
 
@@ -1209,36 +1302,47 @@ const registerBtn = document.getElementById("registerBtn");
 const authBox = document.getElementById("authBox");
 const status = document.getElementById("authStatus");
 
+let authBusy = false;
+
 registerBtn.onclick = async () => {
+
+    if(authBusy) return;
+
+    const name = document.getElementById("username").value.trim();
+
+    if(name.length < 3 || name.length > 16){
+        status.textContent = "Username must be 3 to 16 characters";
+        return;
+    }
+
+    authBusy = true;
 
     try {
 
-        const userCred = await createUserWithEmailAndPassword(
+        username = name;
+
+        await createUserWithEmailAndPassword(
             auth,
             emailInput.value,
             passInput.value
         );
 
-        const uid = userCred.user.uid;
-
-        await setDoc(doc(db, "players", uid), {
-
-            username: usernameInput.value,
-            money: 0,
-            clickPower: 1,
-            upgradeCost: 10
-
-        });
-
         status.textContent = "Account created!";
 
     } catch (e) {
+        username = "";
         status.textContent = e.message;
     }
+
+    authBusy = false;
 
 };
 
 loginBtn.onclick = async () => {
+
+    if(authBusy) return;
+
+    authBusy = true;
 
     try {
 
@@ -1256,21 +1360,43 @@ loginBtn.onclick = async () => {
 
     }
 
+    authBusy = false;
+
 };
 
 onAuthStateChanged(auth, async (user) => {
 
-    console.log("AUTH STATE:", user);
-
     if(!user) return;
 
     uid = user.uid;
-    
-    console.log("UID:", uid);
 
-    authBox.style.display = "none";
+    status.textContent = "Loading your save...";
 
-    await loadCloudSave();
+    for(let attempt = 1; attempt <= 3; attempt++){
+
+        try{
+
+            await loadCloudSave();
+
+            status.textContent = "";
+
+            authBox.style.display = "none";
+
+            subscribeChat();
+
+            return;
+
+        }catch(e){
+
+            console.error(`Load failed (attempt ${attempt})`, e);
+
+            await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+
+        }
+
+    }
+
+    status.textContent = "Could not load your save. Check your connection and refresh the page.";
 
 });
 
@@ -1321,54 +1447,109 @@ async function loadLeaderboard(){
     leaderboard.innerHTML =
     "Loading...";
 
-    const q = query(
-        collection(db,"players"),
-        orderBy("money","desc"),
-        limit(50)
-    );
+    try{
 
-    const snapshot =
-    await getDocs(q);
+        const q = query(
+            collection(db,"players"),
+            orderBy("money","desc"),
+            limit(50)
+        );
 
-    let html = "";
+        const snapshot =
+        await getDocs(q);
 
-    let rank = 1;
+        let html = "";
 
-    snapshot.forEach(doc=>{
+        let rank = 1;
 
-        const data =
-        doc.data();
+        snapshot.forEach(doc=>{
 
-        html += `
+            const data =
+            doc.data();
 
-        <div class="leaderboardEntry">
+            const safeName =
+            String(data.username || "Unknown").replace(/[<>&"]/g, "");
 
-            <span>
-                #${rank}
-            </span>
+            html += `
 
-            <span>
-                ${data.username || "Unknown"}
-            </span>
+            <div class="leaderboardEntry">
 
-            <span>
-                $${Math.floor(data.money || 0)}
-            </span>
+                <span>
+                    #${rank}
+                </span>
 
-        </div>
+                <span>
+                    ${safeName}
+                </span>
 
-        `;
+                <span>
+                    $${Math.floor(Number(data.money) || 0)}
+                </span>
 
-        rank++;
+            </div>
 
-    });
+            `;
 
-    leaderboard.innerHTML = html;
+            rank++;
+
+        });
+
+        leaderboard.innerHTML = html || "No players yet";
+
+    }catch(e){
+
+        console.error("Leaderboard failed", e);
+
+        leaderboard.textContent = "Could not load the leaderboard. Try again.";
+
+    }
 }
+
+document
+.getElementById("usernameChangeBtn")
+.onclick = async ()=>{
+
+    const changeStatus =
+    document.getElementById("usernameChangeStatus");
+
+    const name =
+    document.getElementById("usernameChange").value.trim();
+
+    if(name.length < 3 || name.length > 16){
+        changeStatus.textContent = "Username must be 3 to 16 characters";
+        return;
+    }
+
+    if(!loaded){
+        changeStatus.textContent = "Wait for your save to load first";
+        return;
+    }
+
+    username = name;
+
+    await saveToCloud();
+
+    updateAccountPage();
+
+    document.getElementById("userDisplay").textContent = username;
+
+    document.getElementById("usernameChange").value = "";
+
+    changeStatus.textContent = saveDirty
+        ? "Saved locally, will retry syncing shortly"
+        : "Username updated!";
+
+    setTimeout(()=>{
+        changeStatus.textContent = "";
+    },3000);
+
+};
 
 document
 .getElementById("signOutBtn")
 .onclick = async ()=>{
+
+    if(saveDirty) await saveToCloud();
 
     await signOut(auth);
 
@@ -1451,23 +1632,23 @@ function checkAchievements(){
         );
 }
 
-function updateAccountPage(data){
+function updateAccountPage(){
 
     document.getElementById(
         "accountUsername"
     ).textContent =
-    data.username;
+    username || "Player";
 
     document.getElementById(
         "accountEmail"
     ).textContent =
-    auth.currentUser.email;
+    auth.currentUser ? auth.currentUser.email : "";
 
     document.getElementById(
         "prestigeDisplay"
     )
     .textContent =
-    `Prestige ${prestigeLevel}`
+    `Prestige ${prestigeLevel} (x${2 ** prestigeLevel} earnings)`;
 }
 
 function prestige(){
@@ -1475,12 +1656,16 @@ function prestige(){
     prestigeLevel++;
 
     clickPower = 1;
+    upgradeCost = 10;
 
     updateUI();
+    updateAccountPage();
 
     showAchievementPopup(
         `⭐ Prestige ${prestigeLevel}`
     );
+
+    saveToCloud();
 }
 
 function showAchievementPopup(text){
@@ -1519,11 +1704,11 @@ function unlockAchievement(
     achievements[key] =
     true;
 
+    saveDirty = true;
+
     showAchievementPopup(
         title
     );
-
-    saveToCloud();
 }
 
 function updateAchievementList(){
@@ -1578,153 +1763,146 @@ function updateAchievementList(){
     }
 }
 
-const chatQuery = query(
+let chatSubscribed = false;
 
-    collection(db,"chat"),
+function subscribeChat(){
 
-    orderBy(
-        "timestamp",
-        "asc"
-    ),
+    if(chatSubscribed) return;
 
-    limit(100)
+    chatSubscribed = true;
 
-);
+    const chatQuery = query(
+        collection(db,"chat"),
+        orderBy("timestamp","asc"),
+        limitToLast(100)
+    );
 
-onSnapshot(
-
+    onSnapshot(
     chatQuery,
-
     (snapshot)=>{
 
         const chatBox =
-        document.getElementById(
-            "chatMessages"
-        );
+        document.getElementById("chatMessages");
 
-        if(!chatBox)
-            return;
+        if(!chatBox) return;
 
         chatBox.innerHTML = "";
 
-        snapshot.forEach(doc=>{
+        snapshot.forEach(docSnap=>{
 
-            const data =
-            doc.data();
+            const data = docSnap.data();
 
-            chatBox.innerHTML +=
+            const row =
+            document.createElement("div");
 
-            `<div class="chatMessage">
+            row.className = "chatMessage";
 
-                <span class="chatUsername">
+            const name =
+            document.createElement("span");
 
-                ${data.username}
+            name.className = "chatUsername";
 
-                </span>
+            name.textContent =
+            String(data.username || "Unknown");
 
-                : ${data.message}
+            row.appendChild(name);
 
-            </div>`;
+            row.appendChild(
+                document.createTextNode(
+                    ": " + String(data.message || "")
+                )
+            );
+
+            chatBox.appendChild(row);
 
         });
 
-        chatBox.scrollTop =
-        chatBox.scrollHeight;
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+    },
+    (error)=>{
+
+        console.error("Chat failed", error);
+
+        chatSubscribed = false;
+
+        const chatBox =
+        document.getElementById("chatMessages");
+
+        if(chatBox){
+            chatBox.textContent =
+            "Could not load chat. Refresh to try again.";
+        }
 
     }
+    );
 
-);
+}
+
+let lastChatSend = 0;
+let chatSending = false;
 
 async function sendChatMessage(){
 
     const input =
-    document.getElementById(
-        "chatInput"
-    );
+    document.getElementById("chatInput");
 
-    if(!input)
-        return;
+    if(!input) return;
+
+    if(!uid || !loaded) return;
+
+    if(chatSending) return;
 
     const message =
-    input.value.trim();
+    input.value.trim().slice(0, 200);
 
-    if(message === "")
-        return;
+    if(message === "") return;
 
-    console.log(username);
+    if(Date.now() - lastChatSend < 1500) return;
 
-    await addDoc(
+    chatSending = true;
 
-        collection(
-            db,
-            "chat"
-        ),
+    try{
 
-        {
-
-            username:
-
-            document
-            .getElementById(
-                "usernameDisplay"
-            )
-            .textContent,
-
-            message:
-
+        await addDoc(collection(db,"chat"),{
+            username,
             message,
+            timestamp: serverTimestamp()
+        });
 
-            timestamp:
-            serverTimestamp()
+        lastChatSend = Date.now();
 
-        }
+        input.value = "";
 
-    );
+    }catch(e){
 
-    input.value = "";
+        console.error("Chat send failed", e);
+
+        showAchievementPopup(
+            "Message failed to send"
+        );
+
+    }
+
+    chatSending = false;
+
 }
 
-document.addEventListener(
+document
+.getElementById("sendChatBtn")
+.onclick = sendChatMessage;
 
-    "click",
-
-    (e)=>{
-
-        if(
-            e.target &&
-            e.target.id ===
-            "sendChatBtn"
-        ){
-
-            sendChatMessage();
-
-        }
-
-    }
-
-);
-
-document.addEventListener(
-
+document
+.getElementById("chatInput")
+.addEventListener(
     "keydown",
-
     (e)=>{
 
-        if(
-
-            e.key === "Enter"
-
-            &&
-
-            document.activeElement
-            .id === "chatInput"
-
-        ){
+        if(e.key === "Enter"){
 
             sendChatMessage();
 
         }
 
     }
-
 );

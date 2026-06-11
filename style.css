@@ -682,41 +682,191 @@ body{
     inset:0;
 
     display:flex;
-    flex-direction:column;
     justify-content:center;
     align-items:center;
 
-    background:#f5f7f8;
+    background:
+        radial-gradient(600px 400px at 80% 10%, #e8f5e9, transparent 70%),
+        radial-gradient(500px 350px at 10% 90%, #e8f5e9, transparent 70%),
+        #f5f7f8;
 
     z-index:9999;
 
 }
 
-#authBox input{
+.authCard{
 
-    padding:10px;
-    margin:5px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 
-    border-radius:8px;
-    border:1px solid #ccc;
+    background:white;
 
-    width:200px;
+    padding:40px 45px;
+
+    border-radius:20px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
+
+    width:340px;
+    max-width:calc(100vw - 40px);
 
 }
 
-#authBox button{
+.authLogo{
 
-    margin:5px;
-    padding:10px 20px;
+    width:72px;
+    height:72px;
+
+    border-radius:18px;
+
+    margin-bottom:12px;
+
+}
+
+.authTitle{
+
+    margin:0;
+
+    font-size:26px;
+
+    color:#2e7d32;
+
+}
+
+.authSubtitle{
+
+    margin:6px 0 22px;
+
+    color:#777;
+
+    font-size:14px;
+
+}
+
+#authBox input{
+
+    width:100%;
+
+    padding:12px 14px;
+    margin:6px 0;
+
+    border-radius:10px;
+    border:1px solid #ddd;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:border-color .15s, box-shadow .15s;
+
+}
+
+#authBox input:focus{
+
+    border-color:#4caf50;
+
+    box-shadow:0 0 0 3px rgba(76,175,80,.15);
+
+}
+
+#loginBtn{
+
+    width:100%;
+
+    margin-top:16px;
+    padding:12px;
 
     border:none;
-    border-radius:8px;
+    border-radius:10px;
 
     background:#4caf50;
     color:white;
 
+    font-size:16px;
+    font-weight:bold;
+
     cursor:pointer;
 
+    transition:background .15s;
+
+}
+
+#loginBtn:hover{
+    background:#43a047;
+}
+
+#registerBtn{
+
+    width:100%;
+
+    margin-top:8px;
+    padding:12px;
+
+    border-radius:10px;
+    border:2px solid #4caf50;
+
+    background:white;
+    color:#2e7d32;
+
+    font-size:16px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:background .15s;
+
+}
+
+#registerBtn:hover{
+    background:#e8f5e9;
+}
+
+#authStatus{
+
+    min-height:20px;
+
+    margin:14px 0 0;
+
+    color:#c62828;
+
+    font-size:14px;
+
+    text-align:center;
+
+}
+
+.settingsRow{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+#usernameChange{
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:15px;
+}
+
+#usernameChangeBtn{
+    padding:10px 16px;
+    border:none;
+    border-radius:8px;
+    background:#4caf50;
+    color:white;
+    cursor:pointer;
+}
+
+#usernameChangeBtn:hover{
+    background:#43a047;
+}
+
+#usernameChangeStatus{
+    color:#2e7d32;
+    font-weight:bold;
+    min-height:18px;
 }
 
 #userDisplay{
