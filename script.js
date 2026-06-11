@@ -50,6 +50,24 @@ let money = 0;
 let clickPower = 1;
 let upgradeCost = 10;
 let prestigeLevel = 0;
+let achievements = {
+
+    money100:false,
+    money1000:false,
+    money10000:false,
+    money100000:false,
+
+    copper5:false,
+    silver5:false,
+    gold5:false,
+    diamond5:false,
+    crypto5:false,
+
+    prestige1:false,
+    prestige5:false,
+    prestige10:false
+
+};-
 
 // =====================================
 // BLACKJACK DATA
@@ -174,6 +192,8 @@ function updateUI(){
     `Upgrade Coin ($${upgradeCost})`;
 
     updateCoinVisual();
+    checkAchievements();
+    updateAchievementList();
 }
 
 // =====================================
@@ -285,7 +305,9 @@ async function saveToCloud(){
         username: document.getElementById("username").value,
         money,
         clickPower,
-        upgradeCost
+        upgradeCost,
+        prestigeLevel,
+        achievements
     });
 
     if(!uid) return;
@@ -295,7 +317,9 @@ async function saveToCloud(){
         money,
         username: document.getElementById("username").value,
         clickPower,
-        upgradeCost
+        upgradeCost,
+        prestigeLevel,
+        achievements
 
     });
 
@@ -313,11 +337,17 @@ async function loadCloudSave(){
     money = data.money ?? 0;
     clickPower = data.clickPower ?? 1;
     upgradeCost = data.upgradeCost ?? 10;
+    prestigeLevel = data.prestigeLevel ?? 0;
     
     updateAccountPage(data);
 
     document.getElementById("userDisplay").textContent =
         data.username || "Player";
+
+        if(data.achievements){
+            achievements =
+            data.achievements;
+        }
 
     updateUI();
 
@@ -1333,11 +1363,76 @@ document
 function checkAchievements(){
 
     if(money >= 100)
-        achievements.money100 = true;
+        unlockAchievement(
+            "money100",
+            "First Hundred"
+        );
 
     if(money >= 1000)
-        achievements.money1000 = true;
+        unlockAchievement(
+            "money1000",
+            "Thousandaire"
+        );
 
+    if(money >= 10000)
+        unlockAchievement(
+            "money10000",
+            "Big Money"
+        );
+
+    if(money >= 100000)
+        unlockAchievement(
+            "money100000",
+            "Cash King"
+        );
+
+    if(clickPower >= 5)
+        unlockAchievement(
+            "copper5",
+            "Copper Master"
+        );
+
+    if(clickPower >= 10)
+        unlockAchievement(
+            "silver5",
+            "Silver Master"
+        );
+
+    if(clickPower >= 15)
+        unlockAchievement(
+            "gold5",
+            "Gold Master"
+        );
+
+    if(clickPower >= 20)
+        unlockAchievement(
+            "diamond5",
+            "Diamond Master"
+        );
+
+    if(clickPower >= 25)
+        unlockAchievement(
+            "crypto5",
+            "Crypto Master"
+        );
+
+    if(prestigeLevel >= 1)
+        unlockAchievement(
+            "prestige1",
+            "First Prestige"
+        );
+
+    if(prestigeLevel >= 5)
+        unlockAchievement(
+            "prestige5",
+            "Prestige V"
+        );
+
+    if(prestigeLevel >= 10)
+        unlockAchievement(
+            "prestige10",
+            "Prestige X"
+        );
 }
 
 function updateAccountPage(data){
@@ -1368,7 +1463,102 @@ function prestige(){
 
     updateUI();
 
-    showAchievmentPopup(
+    showAchievementPopup(
         `⭐ Prestige ${prestigeLevel}`
     );
+}
+
+function showAchievementPopup(text){
+
+    const popup =
+    document.createElement("div");
+
+    popup.className =
+    "achievementPopup";
+
+    popup.textContent =
+    "🏆 " + text;
+
+    document.body.appendChild(
+        popup
+    );
+
+    setTimeout(()=>{
+
+        popup.remove();
+
+    },3000);
+
+}
+
+function unlockAchievement(
+    key,
+    title
+){
+
+    if(
+        achievements[key]
+    )
+        return;
+
+    achievements[key] =
+    true;
+
+    showAchievementPopup(
+        title
+    );
+
+    saveToCloud();
+}
+
+function updateAchievementList(){
+
+    const list =
+    document.getElementById(
+        "achievementList"
+    );
+
+    if(!list)
+        return;
+
+    list.innerHTML = "";
+
+    const names = {
+
+        money100:"First Hundred",
+        money1000:"Thousandaire",
+        money10000:"Big Money",
+        money100000:"Cash King",
+
+        copper5:"Copper Master",
+        silver5:"Silver Master",
+        gold5:"Gold Master",
+        diamond5:"Diamond Master",
+        crypto5:"Crypto Master",
+
+        prestige1:"First Prestige",
+        prestige5:"Prestige V",
+        prestige10:"Prestige X"
+
+    };
+
+    for(
+        const key in names
+    ){
+
+        const div =
+        document.createElement(
+            "div"
+        );
+
+        div.className =
+        achievements[key]
+        ? "achievement unlocked"
+        : "achievement locked";
+
+        div.textContent =
+        names[key];
+
+        list.appendChild(div);
+    }
 }

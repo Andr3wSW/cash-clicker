@@ -816,3 +816,56 @@ body{
 
     color:#999;
 }
+
+.achievementPopup{
+
+    position:fixed;
+
+    top:20px;
+    right:20px;
+
+    background:#4caf50;
+
+    color:white;
+
+    padding:15px 20px;
+
+    border-radius:12px;
+
+    font-weight:bold;
+
+    z-index:99999;
+
+    animation:
+    achievementSlide 3s forwards;
+}
+
+@keyframes achievementSlide{
+
+    0%{
+
+        opacity:0;
+
+        transform:
+        translateX(300px);
+    }
+
+    10%{
+
+        opacity:1;
+
+        transform:
+        translateX(0px);
+    }
+
+    90%{
+
+        opacity:1;
+    }
+
+    100%{
+
+        opacity:0;
+    }
+
+}
