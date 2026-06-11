@@ -53,6 +53,7 @@ let money = 0;
 let clickPower = 1;
 let upgradeCost = 10;
 let prestigeLevel = 0;
+let username = "Player";
 let achievements = {
 
     money100:false,
@@ -1649,6 +1650,8 @@ async function sendChatMessage(){
 
     if(message === "")
         return;
+
+    console.log(username);
 
     await addDoc(
 
