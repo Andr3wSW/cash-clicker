@@ -139,6 +139,9 @@ function updateCoinVisual(){
     const data =
     coinStages[stage];
 
+    const multiplier =
+    2 ** prestigeLevel;
+
     coin.textContent =
     data.symbol;
 
