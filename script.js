@@ -115,8 +115,8 @@ const coinStages = [
 {
     name:"Crypto",
     symbol:"₿",
-    color1:"#ab47bc",
-    color2:"#6a1b9a"
+    color1:"#d9fe54",
+    color2:"#80f123"
 }
 
 ];
