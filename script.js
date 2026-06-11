@@ -25,7 +25,6 @@ import {
   limit,
   getDocs,
   addDoc,
-  query,
   orderBy,
   limit,
   onSnapshot,
