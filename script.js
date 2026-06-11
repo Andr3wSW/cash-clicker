@@ -49,6 +49,7 @@ let uid = null;
 let money = 0;
 let clickPower = 1;
 let upgradeCost = 10;
+let prestigeLevel = 0;
 
 // =====================================
 // BLACKJACK DATA
