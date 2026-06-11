@@ -25,8 +25,6 @@ import {
   limit,
   getDocs,
   addDoc,
-  orderBy,
-  limit,
   onSnapshot,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
